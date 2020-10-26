@@ -39,7 +39,6 @@ private:
     qreal m_dpr;
     id<MTLDevice> m_device = nil;
     id<MTLTexture> m_texture = nil;
-    bool m_initialized{false};
     id<MTLRenderPipelineState> m_pipeline;
 
     float m_t;
@@ -67,7 +66,6 @@ BgfxNode::BgfxNode(const uint16_t viewId, QQuickItem *item)
 
 BgfxNode::~BgfxNode()
 {
-
     qDebug("renderer destroyed");
 }
 
@@ -86,10 +84,9 @@ void BgfxNode::sync()
     const auto height = static_cast<uint16_t >(newSize.height());
     bool needsNew = false;
     
-    if(!m_initialized)
+    if(!BgfxRenderer::initialized())
     {
         BgfxRenderer::init(m_window, width, height, bgfx::RendererType::Metal);
-        m_initialized = true;
     }
 
     if (!texture())
@@ -152,7 +149,7 @@ void BgfxNode::sync()
 
 void BgfxNode::render()
 {
-    if (!m_initialized)
+    if (!BgfxRenderer::initialized())
         return;
     m_window->beginExternalCommands();
     

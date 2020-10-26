@@ -11,9 +11,14 @@
 
 namespace BgfxRenderer
 {
+static bool initialized()
+{
+    return bgfx::getInternalData()->context;
+}
+
 static void init(QQuickWindow *window, const uint16_t width, const uint16_t height, bgfx::RendererType::Enum type)
 {
-    if(!bgfx::getInternalData()->context)
+    if(!initialized())
     {
         QSGRendererInterface *rif = window->rendererInterface();
         auto device = (id<MTLDevice>) rif->getResource(window, QSGRendererInterface::DeviceResource);
