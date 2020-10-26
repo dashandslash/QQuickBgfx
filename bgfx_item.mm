@@ -41,7 +41,6 @@ private:
     QQuickWindow *m_window;
     QSizeF m_size;
     qreal m_dpr;
-    id<MTLDevice> m_device = nil;
     id<MTLTexture> m_texture = nil;
     id<MTLRenderPipelineState> m_pipeline;
 
@@ -110,8 +109,6 @@ void BgfxNode::sync()
         [m_texture release];
 
         QSGRendererInterface *rif = m_window->rendererInterface();
-        m_device = (id<MTLDevice>) rif->getResource(m_window, QSGRendererInterface::DeviceResource);
-        assert(m_device);
 
         if(bgfx::isValid(m_backBuffer))
         {
@@ -139,7 +136,9 @@ void BgfxNode::sync()
         desc.resourceOptions = MTLResourceStorageModePrivate;
         desc.storageMode = MTLStorageModePrivate;
         desc.usage = MTLTextureUsageShaderRead | MTLTextureUsageRenderTarget;
-        const auto m_texture = [m_device newTextureWithDescriptor: desc];
+        const auto device = (id<MTLDevice>) rif->getResource(m_window, QSGRendererInterface::DeviceResource);
+        assert(device);
+        const auto m_texture = [device newTextureWithDescriptor: desc];
         [desc release];
         
         // create a QSGTexture from the native texture
