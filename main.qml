@@ -106,7 +106,7 @@ Item {
         id: label
         color: "white"
         wrapMode: Text.WordWrap
-        text: "The background here is a rendered using bgfx Metal using the beforeRendering() and beforeRenderPassRecording() signals in QQuickWindow. This text label and its border is rendered using QML"
+        text: "The backgrounds here are rendered by bgfx Metal backend using the beforeRendering() and beforeRenderPassRecording() signals in QQuickWindow. This text label and its border is rendered using QML"
         anchors.right: parent.right
         anchors.left: parent.left
         anchors.bottom: parent.bottom
