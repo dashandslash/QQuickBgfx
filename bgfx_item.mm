@@ -33,11 +33,6 @@ private slots:
     void render();
 
 private:
-    enum Stage {
-        VertexStage,
-        FragmentStage
-    };
-    using FuncAndLib = QPair<id<MTLFunction>, id<MTLLibrary> >;
 
     QQuickItem *m_item;
     QQuickWindow *m_window;
@@ -45,16 +40,7 @@ private:
     qreal m_dpr;
     id<MTLDevice> m_device = nil;
     id<MTLTexture> m_texture = nil;
-
     bool m_initialized{false};
-    QByteArray m_vert;
-    QByteArray m_vertEntryPoint;
-    QByteArray m_frag;
-    QByteArray m_fragEntryPoint;
-    FuncAndLib m_vs;
-    FuncAndLib m_fs;
-    id<MTLBuffer> m_vbuf;
-    id<MTLBuffer> m_ubuf[3];
     id<MTLRenderPipelineState> m_pipeline;
 
     float m_t;
@@ -176,10 +162,6 @@ void BgfxNode::sync()
     m_t = float(static_cast<BgfxItem *>(m_item)->t());
 }
 
-// This is hooked up to beforeRendering() so we can start our own render
-// command encoder. If we instead wanted to use the scenegraph's render command
-// encoder (targeting the window), it should be connected to
-// beforeRenderPassRecording() instead.
 void BgfxNode::render()
 {
     if (!m_initialized)
@@ -206,16 +188,12 @@ BgfxItem::BgfxItem()
     setFlag(ItemHasContents, true);
 }
 
-// The beauty of using a true QSGNode: no need for complicated cleanup
-// arrangements, unlike in other examples like metalunderqml, because the
-// scenegraph will handle destroying the node at the appropriate time.
-
-void BgfxItem::invalidateSceneGraph() // called on the render thread when the scenegraph is invalidated
+void BgfxItem::invalidateSceneGraph()
 {
     m_node = nullptr;
 }
 
-void BgfxItem::releaseResources() // called on the gui thread if the item is removed from scene
+void BgfxItem::releaseResources()
 {
     m_node = nullptr;
 }
