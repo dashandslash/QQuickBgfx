@@ -3,18 +3,91 @@ import BgfxQQuickItem 1.0
 
 Item {
 
-    width: 320
-    height: 480
+    width: 1024
+    height: 640
 
     BgfxItem {
+        objectName: "bgfxItem1"
+        id: bgfxItem1
         SequentialAnimation on t {
             NumberAnimation { to: 1; duration: 2500; easing.type: Easing.InQuad }
             NumberAnimation { to: 0; duration: 2500; easing.type: Easing.OutQuad }
             loops: Animation.Infinite
             running: true
         }
-        anchors.fill: parent
+        anchors.top: parent.top
+        anchors.left: parent.left
+        anchors.right: parent.right
+        height: parent.height / 3
         viewId: 1
+        backgroundColor: "#3369ff"
+
+        Text {
+            id: labelItem1
+            color: "black"
+            wrapMode: Text.WordWrap
+            text: "Name: " + parent.objectName + " | ViewId: " + parent.viewId
+            anchors.right: parent.right
+            anchors.left: parent.left
+            anchors.top: parent.top
+            anchors.margins: 20
+        }
+    }
+
+    BgfxItem {
+        objectName: "bgfxItem2"
+        id: bgfxItem2
+        SequentialAnimation on t {
+            NumberAnimation { to: 1; duration: 2500; easing.type: Easing.InQuad }
+            NumberAnimation { to: 0; duration: 2500; easing.type: Easing.OutQuad }
+            loops: Animation.Infinite
+            running: true
+        }
+        anchors.top: bgfxItem1.bottom
+        anchors.left: parent.left
+        anchors.right: parent.right
+        height: parent.height / 3
+        viewId: 2
+        backgroundColor: "#ff69ff"
+
+        Text {
+            id: labelItem2
+            color: "black"
+            wrapMode: Text.WordWrap
+            text: "Name: " + parent.objectName + " | ViewId: " + parent.viewId
+            anchors.right: parent.right
+            anchors.left: parent.left
+            anchors.top: parent.top
+            anchors.margins: 20
+        }
+    }
+
+    BgfxItem {
+        objectName: "bgfxItem3"
+        id: bgfxItem3
+        SequentialAnimation on t {
+            NumberAnimation { to: 1; duration: 2500; easing.type: Easing.InQuad }
+            NumberAnimation { to: 0; duration: 2500; easing.type: Easing.OutQuad }
+            loops: Animation.Infinite
+            running: true
+        }
+        anchors.top: bgfxItem2.bottom
+        anchors.left: parent.left
+        anchors.right: parent.right
+        height: parent.height / 3
+        viewId: 0
+        backgroundColor: "#4fa92f"
+
+        Text {
+            id: labelItem3
+            color: "black"
+            wrapMode: Text.WordWrap
+            text: "Name: " + parent.objectName + " | ViewId: " + parent.viewId
+            anchors.right: parent.right
+            anchors.left: parent.left
+            anchors.top: parent.top
+            anchors.margins: 20
+        }
     }
 
     Rectangle {
