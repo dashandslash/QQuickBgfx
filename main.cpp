@@ -66,6 +66,6 @@ int main(int argc, char **argv)
     view.setResizeMode(QQuickView::SizeRootObjectToView);
     view.setSource(QUrl("qrc:///BgfxQQuickItemExample/main.qml"));
     view.show();
-    QObject::connect(&view, &QQuickView::afterRenderPassRecording, bgfxRenderer::frame);
+
     return app.exec();
 }

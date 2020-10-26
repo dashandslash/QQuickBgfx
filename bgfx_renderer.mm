@@ -14,6 +14,14 @@ bool initialized()
     return bgfx::getInternalData()->context;
 }
 
+void frame()
+{
+    if(initialized())
+    {
+        bgfx::frame();
+    }
+}
+
 void init(QQuickWindow *window, const uint16_t width, const uint16_t height, bgfx::RendererType::Enum type)
 {
     if(!initialized())
@@ -36,16 +44,9 @@ void init(QQuickWindow *window, const uint16_t width, const uint16_t height, bgf
         
         bgfx::init(init);
         bgfx::setDebug(BGFX_DEBUG_TEXT);
+        QObject::connect(window, &QQuickWindow::afterRenderPassRecording, bgfxRenderer::frame);
+
         bgfx::frame();
     }
 }
-
-void frame()
-{
-    if(initialized())
-    {
-        bgfx::frame();
-    }
-}
-
 }
