@@ -22,13 +22,13 @@ class BgfxNode : public QSGTextureProvider, public QSGSimpleTextureNode
     Q_OBJECT
 
 public:
-    BgfxNode(const uint16_t viewId, QQuickItem *item);
+    BgfxNode(const uint16_t viewId, const QColor color, QQuickItem *item);
     ~BgfxNode();
 
     QSGTexture *texture() const override;
 
     void sync();
-private slots:
+    private slots:
     void render();
 
 private:
@@ -48,11 +48,12 @@ private:
     bgfx::TextureHandle m_depthBuffer{bgfx::kInvalidHandle};
     
     uint16_t m_viewId{0};
+    QColor m_backgroundColor{Qt::GlobalColor::green};
 };
 
 
-BgfxNode::BgfxNode(const uint16_t viewId, QQuickItem *item)
-    : m_item(item), m_viewId(viewId)
+BgfxNode::BgfxNode(const uint16_t viewId, const QColor color, QQuickItem *item)
+: m_item(item), m_viewId(viewId), m_backgroundColor(color)
 {
     m_window = m_item->window();
     connect(m_window, &QQuickWindow::beforeRenderPassRecording, this, &BgfxNode::render);
@@ -86,7 +87,7 @@ void BgfxNode::sync()
     
     if(!BgfxRenderer::initialized())
     {
-        BgfxRenderer::init(m_window, width, height, bgfx::RendererType::Metal);
+        BgfxRenderer::init(m_window, m_window->width() * m_dpr, m_window->height() * m_dpr, bgfx::RendererType::Metal);
     }
 
     if (!texture())
@@ -104,6 +105,16 @@ void BgfxNode::sync()
         QSGRendererInterface *rif = m_window->rendererInterface();
         m_device = (id<MTLDevice>) rif->getResource(m_window, QSGRendererInterface::DeviceResource);
         assert(m_device);
+
+        if(bgfx::isValid(m_backBuffer))
+        {
+            bgfx::destroy(m_backBuffer);
+        }
+
+        if(bgfx::isValid(m_backBuffer))
+        {
+            bgfx::destroy(m_depthBuffer);
+        }
 
         m_backBuffer = bgfx::createTexture2D(width, height, false, 2, bgfx::TextureFormat::RGBA8, BGFX_TEXTURE_RT, NULL);
         m_depthBuffer = bgfx::createTexture2D(width, height, false, 2, bgfx::TextureFormat::D24S8, BGFX_TEXTURE_RT, NULL);
@@ -137,6 +148,11 @@ void BgfxNode::sync()
         colorAttachment.init(m_backBuffer, bgfx::Access::Write, 0);
         depthAttachment.init(m_depthBuffer, bgfx::Access::Write, 1);
         
+        if(bgfx::isValid(m_offscreenFB))
+        {
+            bgfx::destroy(m_offscreenFB);
+        }
+
         m_offscreenFB = bgfx::createFrameBuffer(m_attachments.size(), m_attachments.data(), false);
         
         bgfx::setViewFrameBuffer(m_viewId, m_offscreenFB);
@@ -157,11 +173,17 @@ void BgfxNode::render()
         return;
     m_window->beginExternalCommands();
     
-    static float r2{0.0f};
-    static float g2{0.0f};
-    static float b2{0.0f};
-    g2 = fmod(g2 + 0.01f, 1.0f);
-    uint32_t color  = uint8_t(r2 * 255) << 24 | uint8_t(g2 * 255) << 16 | uint8_t(b2 * 255) << 8 | 255;
+    static float counter = 0.0f;
+    counter = fmod(counter + 0.01f, 1.0f);
+    auto newColor = m_backgroundColor;
+    newColor.setHslF(m_backgroundColor.hueF(), m_backgroundColor.saturationF(), counter);
+
+    float r{0.0f};
+    float g{0.0f};
+    float b{0.0f};
+    newColor.getRgbF(&r, &g, &b);
+
+    uint32_t color  = uint8_t(r * 255) << 24 | uint8_t(g * 255) << 16 | uint8_t(b * 255) << 8 | 255;
     
     bgfx::setViewClear(m_viewId, BGFX_CLEAR_COLOR|BGFX_CLEAR_DEPTH, color, 1.0f, 0);
     bgfx::setState(BGFX_STATE_WRITE_RGB | BGFX_STATE_WRITE_A);
@@ -195,10 +217,10 @@ QSGNode *BgfxItem::updatePaintNode(QSGNode *oldNode, UpdatePaintNodeData *)
         return nullptr;
 
     if (!node) {
-        m_node = new BgfxNode(m_viewId, this);
+        m_node = new BgfxNode(m_viewId, m_backgroundColor, this);
     }
     
-    m_node->setRect(x(), y(), width(), height());
+    m_node->setRect(boundingRect());
 
     m_node->sync();
 
@@ -224,7 +246,7 @@ void BgfxItem::setT(qreal t)
     m_t = t;
     emit tChanged();
 
-//    update();
+    //    update();
 }
 
 void BgfxItem::setViewId(uint16_t viewId)
@@ -234,6 +256,17 @@ void BgfxItem::setViewId(uint16_t viewId)
 
     m_viewId = viewId;
     emit viewIdChanged();
+
+    update();
+}
+
+void BgfxItem::setBackgroundColor(QColor color)
+{
+    if (color == m_backgroundColor)
+        return;
+
+    m_backgroundColor = color;
+    emit backgroundColorChanged();
 
     update();
 }
