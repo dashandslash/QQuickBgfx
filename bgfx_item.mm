@@ -1,13 +1,12 @@
 #include "bgfx_item.h"
+
+#include "bgfx_renderer.h"
+
 #include <QtGui/QScreen>
 #include <QtQuick/QQuickWindow>
 #include <QtQuick/QSGTextureProvider>
 #include <QtQuick/QSGSimpleTextureNode>
 #include <QtCore/QFile>
-
-#include <Cocoa/Cocoa.h>
-#include <Metal/Metal.h>
-#include <QuartzCore/CAMetalLayer.h>
 
 #include <bgfx/bgfx.h>
 #include <bgfx/platform.h>
@@ -89,18 +88,7 @@ void BgfxNode::sync()
     
     if(!m_initialized)
     {
-        bgfx::Init init;
-        init.type = bgfx::RendererType::Metal;
-        init.platformData.context = m_device;
-        init.resolution.reset = BGFX_RESET_VSYNC;
-        init.resolution.width = width;
-        init.resolution.height = height;
-        init.platformData.nwh = reinterpret_cast<CAMetalLayer *>(reinterpret_cast<NSView *>(m_window->winId()).layer);
-        bgfx::renderFrame();
-
-        bgfx::init(init);
-        bgfx::setDebug(BGFX_DEBUG_TEXT);
-        bgfx::frame();
+        BgfxRenderer::init(m_window, width, height, bgfx::RendererType::Metal);
         m_initialized = true;
     }
 
