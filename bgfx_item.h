@@ -6,25 +6,20 @@ class BgfxNode;
 class BgfxItem : public QQuickItem
 {
     Q_OBJECT
-    Q_PROPERTY(qreal t READ t WRITE setT NOTIFY tChanged)
-    Q_PROPERTY(qreal viewId READ viewId WRITE setViewId NOTIFY viewIdChanged)
+    Q_PROPERTY(int viewId READ viewId WRITE setViewId NOTIFY viewIdChanged)
     Q_PROPERTY(QColor backgroundColor READ backgroundColor WRITE setBackgroundColor NOTIFY backgroundColorChanged)
     QML_ELEMENT
 
 public:
     BgfxItem();
 
-    qreal t() const { return m_t; }
-    void setT(qreal t);
-
-    qreal viewId() const { return m_viewId; }
+    uint16_t viewId() const { return m_viewId; }
     void setViewId(uint16_t viewId);
 
     QColor backgroundColor() const { return m_backgroundColor; }
     void setBackgroundColor(QColor color);
 
 signals:
-    void tChanged();
     void viewIdChanged();
     void backgroundColorChanged();
 
@@ -39,7 +34,6 @@ private:
     void releaseResources() override;
 
     BgfxNode *m_node = nullptr;
-    qreal m_t = 0;
     uint16_t m_viewId{0};
     QColor m_backgroundColor;
 };

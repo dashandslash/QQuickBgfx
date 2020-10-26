@@ -26,7 +26,7 @@ class BgfxNode : public QSGTextureProvider, public QSGSimpleTextureNode
     Q_OBJECT
 
 public:
-    BgfxNode(const uint16_t viewId, const QColor color, QQuickItem *item);
+    BgfxNode(const uint16_t viewId, const QColor color, BgfxItem *item);
     ~BgfxNode();
 
     QSGTexture *texture() const override;
@@ -37,7 +37,7 @@ public:
 
 private:
 
-    QQuickItem *m_item;
+    BgfxItem *m_item;
     QQuickWindow *m_window;
     QSizeF m_size;
     qreal m_dpr;
@@ -45,8 +45,6 @@ private:
     id<MTLTexture> m_texture = nil;
     id<MTLRenderPipelineState> m_pipeline;
 
-    float m_t;
-    
     bgfx::FrameBufferHandle m_offscreenFB{bgfx::kInvalidHandle};
     bgfx::TextureHandle m_backBuffer{bgfx::kInvalidHandle};
     bgfx::TextureHandle m_depthBuffer{bgfx::kInvalidHandle};
@@ -57,7 +55,7 @@ private:
 };
 
 
-BgfxNode::BgfxNode(const uint16_t viewId, const QColor color, QQuickItem *item)
+BgfxNode::BgfxNode(const uint16_t viewId, const QColor color, BgfxItem *item)
 : m_item(item), m_viewId(viewId), m_backgroundColor(color)
 {
     m_window = m_item->window();
@@ -65,6 +63,10 @@ BgfxNode::BgfxNode(const uint16_t viewId, const QColor color, QQuickItem *item)
     connect(m_window, &QQuickWindow::screenChanged, this, [this]() {
         if (m_window->effectiveDevicePixelRatio() != m_dpr)
             m_item->update();
+    });
+    
+    connect(m_item, &BgfxItem::backgroundColorChanged, this, [this]() {
+        m_backgroundColor = m_item->backgroundColor();
     });
     
     qDebug("renderer created");
@@ -163,35 +165,27 @@ void BgfxNode::sync()
         bgfx::setViewFrameBuffer(m_viewId, m_offscreenFB);
 
         bgfx::setViewRect(m_viewId, 0, 0, width, height);
-        bgfx::setViewClear(m_viewId, BGFX_CLEAR_COLOR|BGFX_CLEAR_DEPTH, 0x0030ffff, 1.0f, 0);
         
         // assign the QSGTexture to the node
         setTexture(qsgtexture);
     }
-
-    m_t = float(static_cast<BgfxItem *>(m_item)->t());
 }
 
 void BgfxNode::render()
 {
     if (!bgfxRenderer::initialized())
         return;
+
     m_window->beginExternalCommands();
-
-    ++m_frameCount;
-
-    auto newColor = m_backgroundColor;
-    newColor.setHsl(m_backgroundColor.hue(), m_backgroundColor.saturation(), m_frameCount % 255);
 
     float r{0.0f};
     float g{0.0f};
     float b{0.0f};
-    newColor.getRgbF(&r, &g, &b);
+    m_backgroundColor.getRgbF(&r, &g, &b);
 
-    uint32_t color = uint8_t(r * 255) << 24 | uint8_t(g * 255) << 16 | uint8_t(b * 255) << 8 | 255;
+    const uint32_t color = uint8_t(r * 255) << 24 | uint8_t(g * 255) << 16 | uint8_t(b * 255) << 8 | 255;
 
     bgfx::setViewClear(m_viewId, BGFX_CLEAR_COLOR|BGFX_CLEAR_DEPTH, color, 1.0f, 0);
-    bgfx::setState(BGFX_STATE_WRITE_RGB | BGFX_STATE_WRITE_A);
     bgfx::touch(m_viewId);
 
     m_window->endExternalCommands();
@@ -239,17 +233,6 @@ void BgfxItem::geometryChange(const QRectF &newGeometry, const QRectF &oldGeomet
 
     if (newGeometry.size() != oldGeometry.size())
         update();
-}
-
-void BgfxItem::setT(qreal t)
-{
-    if (t == m_t)
-        return;
-
-    m_t = t;
-    emit tChanged();
-
-    //    update();
 }
 
 void BgfxItem::setViewId(uint16_t viewId)
