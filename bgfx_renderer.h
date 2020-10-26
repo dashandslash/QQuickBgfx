@@ -21,17 +21,15 @@ static void init(QQuickWindow *window, const uint16_t width, const uint16_t heig
     if(!initialized())
     {
         QSGRendererInterface *rif = window->rendererInterface();
-        auto device = (id<MTLDevice>) rif->getResource(window, QSGRendererInterface::DeviceResource);
-        assert(device);
         bgfx::Init init;
         init.type = type;
-        init.platformData.context = device;
         init.resolution.reset = BGFX_RESET_VSYNC;
         init.resolution.width = width;
         init.resolution.height = height;
         switch (type) {
             case bgfx::RendererType::Metal:
                 init.platformData.nwh = reinterpret_cast<CAMetalLayer *>(reinterpret_cast<NSView *>(window->winId()).layer);
+                init.platformData.context = (id<MTLDevice>) rif->getResource(window, QSGRendererInterface::DeviceResource);
                 break;
             default:
                 break;
