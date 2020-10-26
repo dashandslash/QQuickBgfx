@@ -53,6 +53,7 @@ private:
     
     uint16_t m_viewId{0};
     QColor m_backgroundColor{Qt::GlobalColor::green};
+    uint64_t m_frameCount{0};
 };
 
 
@@ -89,9 +90,9 @@ void BgfxNode::sync()
     const auto height = static_cast<uint16_t >(newSize.height());
     bool needsNew = false;
     
-    if(!BgfxRenderer::initialized())
+    if(!bgfxRenderer::initialized())
     {
-        BgfxRenderer::init(m_window, m_window->width() * m_dpr, m_window->height() * m_dpr, bgfx::RendererType::Metal);
+        bgfxRenderer::init(m_window, m_window->width() * m_dpr, m_window->height() * m_dpr, bgfx::RendererType::Metal);
     }
 
     if (!texture())
@@ -173,22 +174,22 @@ void BgfxNode::sync()
 
 void BgfxNode::render()
 {
-    if (!BgfxRenderer::initialized())
+    if (!bgfxRenderer::initialized())
         return;
     m_window->beginExternalCommands();
-    
-    static float counter = 0.0f;
-    counter = fmod(counter + 0.01f, 1.0f);
+
+    ++m_frameCount;
+
     auto newColor = m_backgroundColor;
-    newColor.setHslF(m_backgroundColor.hueF(), m_backgroundColor.saturationF(), counter);
+    newColor.setHsl(m_backgroundColor.hue(), m_backgroundColor.saturation(), m_frameCount % 255);
 
     float r{0.0f};
     float g{0.0f};
     float b{0.0f};
     newColor.getRgbF(&r, &g, &b);
 
-    uint32_t color  = uint8_t(r * 255) << 24 | uint8_t(g * 255) << 16 | uint8_t(b * 255) << 8 | 255;
-    
+    uint32_t color = uint8_t(r * 255) << 24 | uint8_t(g * 255) << 16 | uint8_t(b * 255) << 8 | 255;
+
     bgfx::setViewClear(m_viewId, BGFX_CLEAR_COLOR|BGFX_CLEAR_DEPTH, color, 1.0f, 0);
     bgfx::setState(BGFX_STATE_WRITE_RGB | BGFX_STATE_WRITE_A);
     bgfx::touch(m_viewId);
