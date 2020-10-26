@@ -17,6 +17,10 @@
 #include <QtQuick/QSGTextureProvider>
 #include <QSGSimpleTextureNode>
 
+#include <Cocoa/Cocoa.h>
+#include <Metal/Metal.h>
+#include <QuartzCore/CAMetalLayer.h>
+
 class BgfxNode : public QSGTextureProvider, public QSGSimpleTextureNode
 {
     Q_OBJECT

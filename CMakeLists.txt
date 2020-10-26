@@ -21,7 +21,7 @@ find_package(Qt6 COMPONENTS Quick)
 add_qt_gui_executable(BgfxQQuickItemExample
     main.cpp
     bgfx_item.h bgfx_item.mm
-    bgfx_renderer.h
+    bgfx_renderer.h bgfx_renderer.mm
 )
 target_link_libraries(BgfxQQuickItemExample PUBLIC
     "-framework Metal"
