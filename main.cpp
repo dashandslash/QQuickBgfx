@@ -47,10 +47,14 @@
 ** $QT_END_LICENSE$
 **
 ****************************************************************************/
-
+#include "bgfx_renderer.h"
 #include <QGuiApplication>
 #include <QtQuick/QQuickView>
 #include "bgfx_item.h"
+
+#include <bgfx/bgfx.h>
+#include <bgfx/platform.h>
+#include <bx/bx.h>
 
 int main(int argc, char **argv)
 {
@@ -62,6 +66,6 @@ int main(int argc, char **argv)
     view.setResizeMode(QQuickView::SizeRootObjectToView);
     view.setSource(QUrl("qrc:///BgfxQQuickItemExample/main.qml"));
     view.show();
-
+    QObject::connect(&view, &QQuickView::afterRenderPassRecording, bgfxRenderer::frame);
     return app.exec();
 }

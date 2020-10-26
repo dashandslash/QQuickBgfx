@@ -194,8 +194,6 @@ void BgfxNode::render()
     bgfx::setState(BGFX_STATE_WRITE_RGB | BGFX_STATE_WRITE_A);
     bgfx::touch(m_viewId);
 
-    bgfx::frame();
-    
     m_window->endExternalCommands();
 }
 
