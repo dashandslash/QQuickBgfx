@@ -1,5 +1,0 @@
-<RCC>
-    <qresource prefix="/BgfxQQuickItem">
-        <file>main.qml</file>
-    </qresource>
-</RCC>

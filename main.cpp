@@ -50,7 +50,7 @@
 #include "bgfx_renderer.h"
 #include <QGuiApplication>
 #include <QtQuick/QQuickView>
-#include "bgfx_item.h"
+#include "bgfx_item/bgfx_item.h"
 
 #include <bgfx/bgfx.h>
 #include <bgfx/platform.h>
