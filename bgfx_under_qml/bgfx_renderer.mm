@@ -50,7 +50,7 @@ void init(QQuickWindow *window, const uint16_t width, const uint16_t height, bgf
             win->endExternalCommands();
         });
         QObject::connect(window, &QQuickWindow::afterRenderPassRecording, bgfxRenderer::frame);
-        QObject::connect(window, &QQuickWindow::sceneGraphAboutToStop, bgfxRenderer::shutdown);
+        QObject::connect(window, &QQuickWindow::destroyed, bgfxRenderer::shutdown);
 
         bgfx::frame();
     }
