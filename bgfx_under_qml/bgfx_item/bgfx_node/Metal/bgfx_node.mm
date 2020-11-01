@@ -25,12 +25,12 @@ BgfxNode::BgfxNode(const uint16_t viewId, QQuickItem *item)
             m_item->update();
     });
 
-    qDebug("renderer created");
+    qDebug() << "BgfxNode created, view id: " << viewId;
 }
 
 BgfxNode::~BgfxNode()
 {
-    qDebug("renderer destroyed");
+    qDebug() << "BgfxNode destroyed, view id: " << m_viewId;
 }
 
 QSGTexture *BgfxNode::texture() const
