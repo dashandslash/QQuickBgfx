@@ -11,16 +11,11 @@ class BgfxNode : public QSGTextureProvider, public QSGSimpleTextureNode
     Q_OBJECT
 
 public:
-    BgfxNode(const uint16_t viewId, const QColor color, QQuickItem *item);
+    BgfxNode(const uint16_t viewId, QQuickItem *item);
     ~BgfxNode();
 
     QSGTexture *texture() const override;
     void sync();
-
-    QColor backgroundColor{Qt::GlobalColor::green};
-
-    private slots:
-    void render();
 
 private:
 

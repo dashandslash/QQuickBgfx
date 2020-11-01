@@ -13,6 +13,7 @@
 BgfxItem::BgfxItem()
 {
     setFlag(ItemHasContents, true);
+    bgfxRenderer::addBgfxItem(this);
 }
 
 void BgfxItem::invalidateSceneGraph()
@@ -33,10 +34,7 @@ QSGNode *BgfxItem::updatePaintNode(QSGNode *oldNode, UpdatePaintNodeData *)
         return nullptr;
 
     if (!node) {
-        m_node = new BgfxNode(m_viewId, m_backgroundColor, this);
-        connect(this, &BgfxItem::backgroundColorChanged, [&]{
-            m_node->backgroundColor = m_backgroundColor;
-        });
+        m_node = new BgfxNode(m_viewId, this);
     }
     
     m_node->setRect(boundingRect());

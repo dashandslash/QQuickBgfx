@@ -16,11 +16,10 @@
 #include <QuartzCore/CAMetalLayer.h>
 
 
-BgfxNode::BgfxNode(const uint16_t viewId, const QColor color, QQuickItem *item)
-: m_item(item), m_viewId(viewId), backgroundColor(color)
+BgfxNode::BgfxNode(const uint16_t viewId, QQuickItem *item)
+: m_item(item), m_viewId(viewId)
 {
     m_window = m_item->window();
-    connect(m_window, &QQuickWindow::beforeRenderPassRecording, this, &BgfxNode::render);
     connect(m_window, &QQuickWindow::screenChanged, this, [this]() {
         if (m_window->effectiveDevicePixelRatio() != m_dpr)
             m_item->update();
@@ -123,24 +122,4 @@ void BgfxNode::sync()
         // assign the QSGTexture to the node
         setTexture(qsgtexture);
     }
-}
-
-void BgfxNode::render()
-{
-    if (!bgfxRenderer::initialized())
-        return;
-
-    m_window->beginExternalCommands();
-
-    float r{0.0f};
-    float g{0.0f};
-    float b{0.0f};
-    backgroundColor.getRgbF(&r, &g, &b);
-
-    const uint32_t color = uint8_t(r * 255) << 24 | uint8_t(g * 255) << 16 | uint8_t(b * 255) << 8 | 255;
-
-    bgfx::setViewClear(m_viewId, BGFX_CLEAR_COLOR|BGFX_CLEAR_DEPTH, color, 1.0f, 0);
-    bgfx::touch(m_viewId);
-
-    m_window->endExternalCommands();
 }
