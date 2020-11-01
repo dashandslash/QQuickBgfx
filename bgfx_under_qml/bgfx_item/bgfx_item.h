@@ -1,5 +1,5 @@
 #pragma once
-#include <QtQuick/QQuickItem>
+#include <QQuickItem>
 
 class BgfxNode;
 
@@ -12,6 +12,7 @@ class BgfxItem : public QQuickItem
 
 public:
     BgfxItem();
+    ~BgfxItem();
 
     uint16_t viewId() const { return m_viewId; }
     void setViewId(uint16_t viewId);
@@ -33,7 +34,7 @@ protected:
 private:
     void releaseResources() override;
 
-    BgfxNode *m_node = nullptr;
+    std::unique_ptr<BgfxNode> m_node;
     uint16_t m_viewId{0};
     QColor m_backgroundColor;
 };

@@ -16,14 +16,18 @@ BgfxItem::BgfxItem()
     bgfxRenderer::addBgfxItem(this);
 }
 
+BgfxItem::~BgfxItem() = default;
+
 void BgfxItem::invalidateSceneGraph()
 {
-    m_node = nullptr;
+    m_node->deleteLater();
+    m_node.reset();
 }
 
 void BgfxItem::releaseResources()
 {
-    m_node = nullptr;
+    m_node->deleteLater();
+    m_node.reset();
 }
 
 QSGNode *BgfxItem::updatePaintNode(QSGNode *oldNode, UpdatePaintNodeData *)
@@ -34,7 +38,7 @@ QSGNode *BgfxItem::updatePaintNode(QSGNode *oldNode, UpdatePaintNodeData *)
         return nullptr;
 
     if (!node) {
-        m_node = new BgfxNode(m_viewId, this);
+        m_node = std::make_unique<BgfxNode>(m_viewId, this);
     }
     
     m_node->setRect(boundingRect());
@@ -51,7 +55,7 @@ QSGNode *BgfxItem::updatePaintNode(QSGNode *oldNode, UpdatePaintNodeData *)
     m_node->setTextureCoordinatesTransform(QSGSimpleTextureNode::NoTransform);
     m_node->setFiltering(QSGTexture::Linear);
 
-    return m_node;
+    return m_node.get();
 }
 
 void BgfxItem::geometryChange(const QRectF &newGeometry, const QRectF &oldGeometry)
