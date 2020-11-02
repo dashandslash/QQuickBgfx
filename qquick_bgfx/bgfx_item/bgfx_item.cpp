@@ -27,7 +27,7 @@ QSGNode* BgfxItem::updatePaintNode(QSGNode *oldNode, UpdatePaintNodeData *)
 {
     BgfxNode *node = static_cast<BgfxNode *>(oldNode);
     const auto size = boundingRect().size().toSize();
-    if (!qquick_bgfx::initialized() || (!node && (size.width() <= 0 || size.height() <= 0)))
+    if (!QQuickBgfx::initialized() || (!node && (size.width() <= 0 || size.height() <= 0)))
     {
         return node;
     }

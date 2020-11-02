@@ -3,7 +3,7 @@
 #include <bgfx/platform.h>
 
 
-namespace qquick_bgfx {
+namespace QQuickBgfx {
 template<bgfx::RendererType::Enum T>
 void init(void* windowHandle, void* context, const uint16_t width, const uint16_t height);
 

@@ -10,7 +10,7 @@
 //#include <QGuiApplication>
 
 
-using namespace qquick_bgfx;
+using namespace QQuickBgfx;
 
 QBgfx::QBgfx(QQuickWindow* w, const QList<BgfxItem*> items) : window(w)
 {
@@ -18,7 +18,7 @@ QBgfx::QBgfx(QQuickWindow* w, const QList<BgfxItem*> items) : window(w)
     connect(window, &QQuickWindow::sceneGraphInitialized, this, &QBgfx::init, Qt::DirectConnection);
     connect(window, &QQuickWindow::beforeRenderPassRecording, this, &QBgfx::renderFrame, Qt::DirectConnection);
     //Free standing function instead will always be called from the signal thread
-    connect(window, &QQuickWindow::afterRenderPassRecording, qquick_bgfx::frame);
+    connect(window, &QQuickWindow::afterRenderPassRecording, QQuickBgfx::frame);
 //    connect(QGuiApplication::instance(), &QGuiApplication::aboutToQuit, this, &Renderer::shutdown, Qt::QueuedConnection);
 
     bgfxItems.reserve(bgfxItems.size());
@@ -38,7 +38,7 @@ void QBgfx::init()
     auto device = static_cast<void*>(rif->getResource(window, QSGRendererInterface::DeviceResource));
     switch (rif->graphicsApi()) {
         case QSGRendererInterface::MetalRhi:
-            qquick_bgfx::init<bgfx::RendererType::Metal>(layer, device, window->width() * dpr, window->height() * dpr);
+            QQuickBgfx::init<bgfx::RendererType::Metal>(layer, device, window->width() * dpr, window->height() * dpr);
             break;
         default:
             throw std::invalid_argument("Invalid or not implemented Graphics Api");
@@ -48,7 +48,7 @@ void QBgfx::init()
 
 void QBgfx::renderFrame()
 {
-    if (!qquick_bgfx::initialized())
+    if (!QQuickBgfx::initialized())
         return;
     
     window->beginExternalCommands();

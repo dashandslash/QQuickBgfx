@@ -7,7 +7,7 @@
 
 
 template<>
-void qquick_bgfx::init<bgfx::RendererType::Metal>(void *windowHandler, void* context, const uint16_t width, const uint16_t height)
+void QQuickBgfx::init<bgfx::RendererType::Metal>(void *windowHandler, void* context, const uint16_t width, const uint16_t height)
 {
     if(!initialized())
     {

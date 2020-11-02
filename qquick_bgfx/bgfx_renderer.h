@@ -8,7 +8,7 @@ class BgfxItem;
 class QQmlEngine;
 class QQuickWindow;
 
-namespace qquick_bgfx
+namespace QQuickBgfx
 {
 class QBgfx : public QObject
 {
