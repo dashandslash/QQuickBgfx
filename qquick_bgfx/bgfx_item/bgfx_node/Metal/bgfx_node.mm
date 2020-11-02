@@ -2,18 +2,12 @@
 
 #include "bgfx_renderer.h"
 
-#include <QtGui/QScreen>
+#include <QSGTexture>
 #include <QQuickItem>
 
-#include <bgfx/bgfx.h>
 #include <bgfx/platform.h>
-#include <bx/bx.h>
 
-#include <QSGTexture>
-
-#include <Cocoa/Cocoa.h>
 #include <Metal/Metal.h>
-#include <QuartzCore/CAMetalLayer.h>
 
 
 BgfxNode::BgfxNode(const uint16_t viewId, QQuickItem *item)
@@ -41,7 +35,7 @@ QSGTexture *BgfxNode::texture() const
 void BgfxNode::sync()
 {
     m_dpr = m_window->effectiveDevicePixelRatio();
-    const auto newSize = rect().size() * m_dpr;
+    const auto newSize = rect().size().toSize() * m_dpr;
     if(newSize.isEmpty())
         return;
     const auto width = static_cast<uint16_t >(newSize.width());

@@ -1,19 +1,12 @@
 #include "bgfx_item.h"
 
 #include "bgfx_node/Metal/bgfx_node.h"
-#include "bgfx_renderer.h"
-
-#include <QtGui/QScreen>
-#include <QtQuick/QQuickWindow>
-#include <QtQuick/QSGTextureProvider>
-#include <QtQuick/QSGSimpleTextureNode>
-#include <QtCore/QFile>
+#include "qquick_bgfx.h"
 
 
 BgfxItem::BgfxItem()
 {
     setFlag(ItemHasContents, true);
-    bgfxRenderer::addBgfxItem(this);
 }
 
 BgfxItem::~BgfxItem() = default;
@@ -30,25 +23,21 @@ void BgfxItem::releaseResources()
     m_node.reset();
 }
 
-QSGNode *BgfxItem::updatePaintNode(QSGNode *oldNode, UpdatePaintNodeData *)
+QSGNode* BgfxItem::updatePaintNode(QSGNode *oldNode, UpdatePaintNodeData *)
 {
     BgfxNode *node = static_cast<BgfxNode *>(oldNode);
+    const auto size = boundingRect().size().toSize();
+    if (!qquick_bgfx::initialized() || (!node && (size.width() <= 0 || size.height() <= 0)))
+    {
+        return node;
+    }
 
-    if (!node && (width() <= 0 || height() <= 0))
-        return nullptr;
-
-    if (!node) {
+    if (!node)
+    {
         m_node = std::make_unique<BgfxNode>(m_viewId, this);
     }
-    
+     
     m_node->setRect(boundingRect());
-
-    if(!bgfxRenderer::initialized())
-    {
-        auto win = window();
-        const auto dpr = win->effectiveDevicePixelRatio();
-        bgfxRenderer::init(win, win->width() * dpr, win->height() * dpr, bgfx::RendererType::Metal);
-    }
 
     m_node->sync();
 
@@ -87,6 +76,3 @@ void BgfxItem::setBackgroundColor(QColor color)
 
     update();
 }
-
-
-//#include "bgfx_item.moc"

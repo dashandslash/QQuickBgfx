@@ -3,8 +3,7 @@
 #include <QSGSimpleTextureNode>
 
 #include <bgfx/bgfx.h>
-#include <bgfx/platform.h>
-#include <bx/bx.h>
+
 
 class BgfxNode : public QSGTextureProvider, public QSGSimpleTextureNode
 {
