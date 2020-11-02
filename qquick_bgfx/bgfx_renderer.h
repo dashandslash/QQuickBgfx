@@ -1,4 +1,6 @@
 #pragma once
+#include <bgfx/platform.h>
+
 #include <QObject>
 
 #include <vector>
@@ -27,10 +29,11 @@ void init();
 
 signals:
 void render(const std::vector<BgfxItem*>&);
+void initialized(bgfx::Init&);
 
 private:
 std::vector<BgfxItem*> bgfxItems;
 QQuickWindow* window{nullptr};
-
+bgfx::Init m_bgfxInit;
 };
 }

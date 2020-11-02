@@ -38,12 +38,14 @@ void QBgfx::init()
     auto device = static_cast<void*>(rif->getResource(window, QSGRendererInterface::DeviceResource));
     switch (rif->graphicsApi()) {
         case QSGRendererInterface::MetalRhi:
-            QQuickBgfx::init<bgfx::RendererType::Metal>(layer, device, window->width() * dpr, window->height() * dpr);
+            m_bgfxInit = QQuickBgfx::init<bgfx::RendererType::Metal>(layer, device, window->width() * dpr, window->height() * dpr);
             break;
         default:
             throw std::invalid_argument("Invalid or not implemented Graphics Api");
-            break;
+            return;
     }
+
+    emit initialized(m_bgfxInit);
 }
 
 void QBgfx::renderFrame()
@@ -58,7 +60,7 @@ void QBgfx::renderFrame()
 
 void QBgfx::shutdown()
 {
-    if(initialized())
+    if(QQuickBgfx::initialized())
     {
         bgfx::shutdown();
     }

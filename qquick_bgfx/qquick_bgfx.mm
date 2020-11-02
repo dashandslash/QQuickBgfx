@@ -7,7 +7,7 @@
 
 
 template<>
-void QQuickBgfx::init<bgfx::RendererType::Metal>(void *windowHandler, void* context, const uint16_t width, const uint16_t height)
+bgfx::Init QQuickBgfx::init<bgfx::RendererType::Metal>(void *windowHandler, void* context, const uint16_t width, const uint16_t height)
 {
     if(!initialized())
     {
@@ -18,8 +18,9 @@ void QQuickBgfx::init<bgfx::RendererType::Metal>(void *windowHandler, void* cont
         init.resolution.height = height;
         init.platformData.nwh = reinterpret_cast<CAMetalLayer *>(reinterpret_cast<NSView *>(windowHandler).layer);
         init.platformData.context = static_cast<id<MTLDevice>>(context);
-        bgfx::renderFrame();
-        bgfx::init(init);
-        bgfx::setDebug(BGFX_DEBUG_TEXT);
+        return init;
     }
+    else
+        return bgfx::Init();
+
 }

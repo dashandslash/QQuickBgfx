@@ -5,7 +5,7 @@
 
 namespace QQuickBgfx {
 template<bgfx::RendererType::Enum T>
-void init(void* windowHandle, void* context, const uint16_t width, const uint16_t height);
+bgfx::Init init(void* windowHandle, void* context, const uint16_t width, const uint16_t height);
 
 inline bool initialized()
 {

@@ -6,9 +6,16 @@
 
 #include <bgfx/bgfx.h>
 
+//init_example initialize bgfx from a gien bgfx::Init
+void init_example(const bgfx::Init& init)
+{
+    bgfx::renderFrame();
+    bgfx::init(init);
+    bgfx::setDebug(BGFX_DEBUG_TEXT);
+}
 
-//This function runs the rendering code
-void renderExample(const std::vector<BgfxItem*>& bgfxItems)
+//render_example runs the rendering code
+void render_example(const std::vector<BgfxItem*>& bgfxItems)
 {
     for(const auto item : bgfxItems)
     {
@@ -40,8 +47,10 @@ int main(int argc, char **argv)
 
     const auto qbgfx = QQuickBgfx::QBgfx(static_cast<QQuickWindow*>(&view), view.rootObject()->findChildren<BgfxItem*>());
     
-    //Connection to the emitted signal allows to decouple the rendering code from the qquick_bgfx::Renderer wrapper
-    QObject::connect(&qbgfx, &QQuickBgfx::QBgfx::render, renderExample);
+    //Connection to initialized signal allows to decouple the bgfx initialization from the qquick_bgfx::QBgfx wrapper
+    QObject::connect(&qbgfx, &QQuickBgfx::QBgfx::initialized, init_example);
+    //Connection to render signal allows to decouple the rendering code from the qquick_bgfx::QBgfx wrapper
+    QObject::connect(&qbgfx, &QQuickBgfx::QBgfx::render, render_example);
     
     return app.exec();
 }
