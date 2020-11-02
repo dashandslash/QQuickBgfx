@@ -10,14 +10,14 @@ class QQuickWindow;
 
 namespace qquick_bgfx
 {
-class Renderer : public QObject
+class QBgfx : public QObject
 {
     Q_OBJECT
 public:
-Renderer() = delete;
-Renderer(QQuickWindow *, const QList<BgfxItem*>);
+QBgfx() = delete;
+QBgfx(QQuickWindow *, const QList<BgfxItem*>);
 
-~Renderer();
+~QBgfx();
 
 private slots:
 

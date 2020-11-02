@@ -38,10 +38,10 @@ int main(int argc, char **argv)
     view.setSource(QUrl("qrc:///BgfxQQuickItemExample/main.qml"));
     view.show();
 
-    auto r = qquick_bgfx::Renderer(static_cast<QQuickWindow*>(&view), view.rootObject()->findChildren<BgfxItem*>());
+    const auto qbgfx = qquick_bgfx::QBgfx(static_cast<QQuickWindow*>(&view), view.rootObject()->findChildren<BgfxItem*>());
     
     //Connection to the emitted signal allows to decouple the rendering code from the qquick_bgfx::Renderer wrapper
-    QObject::connect(&r, &qquick_bgfx::Renderer::render, renderExample);
+    QObject::connect(&qbgfx, &qquick_bgfx::QBgfx::render, renderExample);
     
     return app.exec();
 }

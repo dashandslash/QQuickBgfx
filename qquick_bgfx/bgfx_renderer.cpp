@@ -12,11 +12,11 @@
 
 using namespace qquick_bgfx;
 
-Renderer::Renderer(QQuickWindow* w, const QList<BgfxItem*> items) : window(w)
+QBgfx::QBgfx(QQuickWindow* w, const QList<BgfxItem*> items) : window(w)
 {
     //Qt::DirectConnection needs to be specified in order to call the slot from the signal thread
-    connect(window, &QQuickWindow::sceneGraphInitialized, this, &Renderer::init, Qt::DirectConnection);
-    connect(window, &QQuickWindow::beforeRenderPassRecording, this, &Renderer::renderFrame, Qt::DirectConnection);
+    connect(window, &QQuickWindow::sceneGraphInitialized, this, &QBgfx::init, Qt::DirectConnection);
+    connect(window, &QQuickWindow::beforeRenderPassRecording, this, &QBgfx::renderFrame, Qt::DirectConnection);
     //Free standing function instead will always be called from the signal thread
     connect(window, &QQuickWindow::afterRenderPassRecording, qquick_bgfx::frame);
 //    connect(QGuiApplication::instance(), &QGuiApplication::aboutToQuit, this, &Renderer::shutdown, Qt::QueuedConnection);
@@ -25,12 +25,12 @@ Renderer::Renderer(QQuickWindow* w, const QList<BgfxItem*> items) : window(w)
     bgfxItems.insert(bgfxItems.end(), items.begin(), items.end());
 }
 
-Renderer::~Renderer()
+QBgfx::~QBgfx()
 {
 //    shutdown();
 }
 
-void Renderer::init()
+void QBgfx::init()
 {
     QSGRendererInterface *rif = window->rendererInterface();
     const auto dpr = window->effectiveDevicePixelRatio();
@@ -46,7 +46,7 @@ void Renderer::init()
     }
 }
 
-void Renderer::renderFrame()
+void QBgfx::renderFrame()
 {
     if (!qquick_bgfx::initialized())
         return;
@@ -56,7 +56,7 @@ void Renderer::renderFrame()
     window->endExternalCommands();
 }
 
-void Renderer::shutdown()
+void QBgfx::shutdown()
 {
     if(initialized())
     {
