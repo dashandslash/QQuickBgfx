@@ -3,6 +3,7 @@
 
 #include <vector>
 
+
 class BgfxItem;
 class QQmlEngine;
 class QQuickWindow;
@@ -20,9 +21,12 @@ Renderer(QQuickWindow *, const QList<BgfxItem*>);
 
 private slots:
 
-void render();
+void renderFrame();
 void shutdown();
 void init();
+
+signals:
+void render(const std::vector<BgfxItem*>&);
 
 private:
 std::vector<BgfxItem*> bgfxItems;

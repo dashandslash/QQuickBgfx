@@ -16,7 +16,7 @@ Renderer::Renderer(QQuickWindow* w, const QList<BgfxItem*> items) : window(w)
 {
     //Qt::DirectConnection needs to be specified in order to call the slot from the signal thread
     connect(window, &QQuickWindow::sceneGraphInitialized, this, &Renderer::init, Qt::DirectConnection);
-    connect(window, &QQuickWindow::beforeRenderPassRecording, this, &Renderer::render, Qt::DirectConnection);
+    connect(window, &QQuickWindow::beforeRenderPassRecording, this, &Renderer::renderFrame, Qt::DirectConnection);
     //Free standing function instead will always be called from the signal thread
     connect(window, &QQuickWindow::afterRenderPassRecording, qquick_bgfx::frame);
 //    connect(QGuiApplication::instance(), &QGuiApplication::aboutToQuit, this, &Renderer::shutdown, Qt::QueuedConnection);
@@ -46,28 +46,13 @@ void Renderer::init()
     }
 }
 
-void Renderer::render()
+void Renderer::renderFrame()
 {
     if (!qquick_bgfx::initialized())
         return;
     
     window->beginExternalCommands();
-    
-    for(const auto item : bgfxItems)
-    {
-        if (item->viewId() < 256)
-        {
-            float r{0.0f};
-            float g{0.0f};
-            float b{0.0f};
-            item->backgroundColor().getRgbF(&r, &g, &b);
-
-            const uint32_t color = uint8_t(r * 255) << 24 | uint8_t(g * 255) << 16 | uint8_t(b * 255) << 8 | 255;
-
-            bgfx::setViewClear(item->viewId(), BGFX_CLEAR_COLOR|BGFX_CLEAR_DEPTH, color, 1.0f, 0);
-            bgfx::touch(item->viewId());
-        }
-    }
+    emit render(bgfxItems);
     window->endExternalCommands();
 }
 
