@@ -1,5 +1,5 @@
-#include <qquick_bgfx/bgfx_renderer.h>
-#include <bgfx_item/bgfx_item.h>
+#include <src/qbgfx.h>
+#include <qquickbgfxitem/qquickbgfxitem.h>
 
 #include <QGuiApplication>
 #include <QQuickView>
@@ -15,7 +15,7 @@ void init_example(const bgfx::Init& init)
 }
 
 //render_example runs the rendering code
-void render_example(const std::vector<BgfxItem*>& bgfxItems)
+void render_example(const std::vector<QQuickBgfxItem*>& bgfxItems)
 {
     for(const auto item : bgfxItems)
     {
@@ -45,7 +45,7 @@ int main(int argc, char **argv)
     view.setSource(QUrl("qrc:///BgfxQQuickItemExample/main.qml"));
     view.show();
 
-    const auto qbgfx = QQuickBgfx::QBgfx(static_cast<QQuickWindow*>(&view), view.rootObject()->findChildren<BgfxItem*>());
+    const auto qbgfx = QQuickBgfx::QBgfx(static_cast<QQuickWindow*>(&view), view.rootObject()->findChildren<QQuickBgfxItem*>());
     
     //Connection to initialized signal allows to decouple the bgfx initialization from the qquick_bgfx::QBgfx wrapper
     QObject::connect(&qbgfx, &QQuickBgfx::QBgfx::initialized, init_example);

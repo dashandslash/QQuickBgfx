@@ -1,4 +1,6 @@
 #pragma once
+#include "qquickbgfxitem/qquickbgfxitem.h"
+
 #include <bgfx/platform.h>
 
 #include <QObject>
@@ -6,7 +8,6 @@
 #include <vector>
 
 
-class BgfxItem;
 class QQmlEngine;
 class QQuickWindow;
 
@@ -17,7 +18,7 @@ class QBgfx : public QObject
     Q_OBJECT
 public:
 QBgfx() = delete;
-QBgfx(QQuickWindow *, const QList<BgfxItem*>);
+QBgfx(QQuickWindow *, const QList<QQuickBgfxItem*>);
 
 ~QBgfx();
 
@@ -28,11 +29,11 @@ void shutdown();
 void init();
 
 signals:
-void render(const std::vector<BgfxItem*>&);
+void render(const std::vector<QQuickBgfxItem*>&);
 void initialized(bgfx::Init&);
 
 private:
-std::vector<BgfxItem*> bgfxItems;
+std::vector<QQuickBgfxItem*> bgfxItems;
 QQuickWindow* window{nullptr};
 bgfx::Init m_bgfxInit;
 };

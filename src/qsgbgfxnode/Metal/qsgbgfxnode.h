@@ -5,13 +5,13 @@
 #include <bgfx/bgfx.h>
 
 
-class BgfxNode : public QSGTextureProvider, public QSGSimpleTextureNode
+class QSGBgfxNode : public QSGTextureProvider, public QSGSimpleTextureNode
 {
     Q_OBJECT
 
 public:
-    BgfxNode(const uint16_t viewId, QQuickItem *item);
-    ~BgfxNode();
+    QSGBgfxNode(const uint16_t viewId, QQuickItem *item);
+    ~QSGBgfxNode();
 
     QSGTexture *texture() const override;
     void sync();

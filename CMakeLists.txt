@@ -16,14 +16,14 @@ find_package(Qt6 COMPONENTS Quick)
 
 qt_add_executable(BgfxQQuickItemExample
     main.cpp
-    qquick_bgfx/bgfx_item/bgfx_item.h
-    qquick_bgfx/bgfx_item/bgfx_item.cpp
-    qquick_bgfx/bgfx_item/bgfx_node/Metal/bgfx_node.h
-    qquick_bgfx/bgfx_item/bgfx_node/Metal/bgfx_node.mm
-    qquick_bgfx/bgfx_renderer.h
-    qquick_bgfx/bgfx_renderer.cpp
-    qquick_bgfx/qquick_bgfx.mm
-    qquick_bgfx/qquick_bgfx.h
+    src/qquickbgfxitem/qquickbgfxitem.h
+    src/qquickbgfxitem/qquickbgfxitem.cpp
+    src/qsgbgfxnode/Metal/qsgbgfxnode.h
+    src/qsgbgfxnode/Metal/qsgbgfxnode.mm
+    src/qbgfx.h
+    src/qbgfx.cpp
+    src/qquick_bgfx.mm
+    src/qquick_bgfx.h
 )
 
 target_link_libraries(BgfxQQuickItemExample PUBLIC
@@ -39,8 +39,8 @@ target_link_libraries(BgfxQQuickItemExample PUBLIC
 target_include_directories(BgfxQQuickItemExample
                             PUBLIC
                             ${CMAKE_SOURCE_DIR}
-                            ${CMAKE_SOURCE_DIR}/qquick_bgfx
-                            ${CMAKE_SOURCE_DIR}/qquick_bgfx/bgfx_item
+                            ${CMAKE_SOURCE_DIR}/src
+                            ${CMAKE_SOURCE_DIR}/src/qquickbgfxitem
                             )
 
 # Resources:
@@ -69,7 +69,7 @@ install(TARGETS BgfxQQuickItemExample
 
 set_target_properties(BgfxQQuickItemExample PROPERTIES
     QT_QML_MODULE_VERSION 1.0
-    QT_QML_MODULE_URI BgfxQQuickItem
+    QT_QML_MODULE_URI QQuickBgfx
 )
 
 qt6_qml_type_registration(BgfxQQuickItemExample)

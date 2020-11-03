@@ -1,6 +1,4 @@
-#include <qquick_bgfx.h>
-
-#include <bgfx_item/bgfx_item.h>
+#include "qquick_bgfx.h"
 
 #include <Cocoa/Cocoa.h>
 #include <QuartzCore/CAMetalLayer.h>

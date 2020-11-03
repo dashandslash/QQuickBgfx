@@ -1,33 +1,33 @@
-#include "bgfx_item.h"
+#include "qquickbgfxitem.h"
 
-#include "bgfx_node/Metal/bgfx_node.h"
+#include "qsgbgfxnode/Metal/qsgbgfxnode.h"
 #include "qquick_bgfx.h"
 
 
-BgfxItem::BgfxItem()
+QQuickBgfxItem::QQuickBgfxItem()
 {
     setAcceptedMouseButtons(Qt::AllButtons);
     setFlag(QQuickItem::ItemAcceptsInputMethod);
     setFlag(QQuickItem::ItemHasContents);
 }
 
-BgfxItem::~BgfxItem() = default;
+QQuickBgfxItem::~QQuickBgfxItem() = default;
 
-void BgfxItem::invalidateSceneGraph()
+void QQuickBgfxItem::invalidateSceneGraph()
 {
     m_node->deleteLater();
     m_node.reset();
 }
 
-void BgfxItem::releaseResources()
+void QQuickBgfxItem::releaseResources()
 {
     m_node->deleteLater();
     m_node.reset();
 }
 
-QSGNode* BgfxItem::updatePaintNode(QSGNode *oldNode, UpdatePaintNodeData *)
+QSGNode* QQuickBgfxItem::updatePaintNode(QSGNode *oldNode, UpdatePaintNodeData *)
 {
-    BgfxNode *node = static_cast<BgfxNode *>(oldNode);
+    QSGBgfxNode *node = static_cast<QSGBgfxNode *>(oldNode);
     const auto size = boundingRect().size().toSize();
     if (!QQuickBgfx::initialized() || (!node && (size.width() <= 0 || size.height() <= 0)))
     {
@@ -36,7 +36,7 @@ QSGNode* BgfxItem::updatePaintNode(QSGNode *oldNode, UpdatePaintNodeData *)
 
     if (!node)
     {
-        m_node = std::make_unique<BgfxNode>(m_viewId, this);
+        m_node = std::make_unique<QSGBgfxNode>(m_viewId, this);
     }
      
     m_node->setRect(boundingRect());
@@ -49,7 +49,7 @@ QSGNode* BgfxItem::updatePaintNode(QSGNode *oldNode, UpdatePaintNodeData *)
     return m_node.get();
 }
 
-void BgfxItem::geometryChange(const QRectF &newGeometry, const QRectF &oldGeometry)
+void QQuickBgfxItem::geometryChange(const QRectF &newGeometry, const QRectF &oldGeometry)
 {
     QQuickItem::geometryChange(newGeometry, oldGeometry);
 
@@ -57,13 +57,13 @@ void BgfxItem::geometryChange(const QRectF &newGeometry, const QRectF &oldGeomet
         update();
 }
 
-void BgfxItem::mouseMoveEvent(QMouseEvent *event)
+void QQuickBgfxItem::mouseMoveEvent(QMouseEvent *event)
 {
     QQuickItem::mouseMoveEvent(event);
     m_mousePos = {event->position().toPoint().x(), event->position().toPoint().y()};
 }
 
-void BgfxItem::mousePressEvent(QMouseEvent *event)
+void QQuickBgfxItem::mousePressEvent(QMouseEvent *event)
 {
     if(!(event->button() & acceptedMouseButtons()))
     {
@@ -74,7 +74,7 @@ void BgfxItem::mousePressEvent(QMouseEvent *event)
     event->setAccepted(true);
 }
 
-void BgfxItem::mouseReleaseEvent(QMouseEvent *event)
+void QQuickBgfxItem::mouseReleaseEvent(QMouseEvent *event)
 {
     if(!(event->button() & acceptedMouseButtons()))
     {
@@ -85,7 +85,7 @@ void BgfxItem::mouseReleaseEvent(QMouseEvent *event)
     event->setAccepted(true);
 }
 
-void BgfxItem::setViewId(uint16_t viewId)
+void QQuickBgfxItem::setViewId(uint16_t viewId)
 {
     if (viewId == m_viewId)
         return;
@@ -96,7 +96,7 @@ void BgfxItem::setViewId(uint16_t viewId)
     update();
 }
 
-void BgfxItem::setBackgroundColor(QColor color)
+void QQuickBgfxItem::setBackgroundColor(QColor color)
 {
     if (color == m_backgroundColor)
         return;

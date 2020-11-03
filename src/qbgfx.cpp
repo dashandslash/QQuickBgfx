@@ -1,7 +1,7 @@
-#include <bgfx_renderer.h>
+#include <qbgfx.h>
 
-#include <qquick_bgfx.h>
-#include <bgfx_item/bgfx_item.h>
+#include "qquick_bgfx.h"
+#include "qquickbgfxitem/qquickbgfxitem.h"
 
 #include <bgfx/bgfx.h>
 
@@ -12,7 +12,7 @@
 
 using namespace QQuickBgfx;
 
-QBgfx::QBgfx(QQuickWindow* w, const QList<BgfxItem*> items) : window(w)
+QBgfx::QBgfx(QQuickWindow* w, const QList<QQuickBgfxItem*> items) : window(w)
 {
     //Qt::DirectConnection needs to be specified in order to call the slot from the signal thread
     connect(window, &QQuickWindow::sceneGraphInitialized, this, &QBgfx::init, Qt::DirectConnection);

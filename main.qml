@@ -1,5 +1,5 @@
 import QtQuick 2.0
-import BgfxQQuickItem 1.0
+import QQuickBgfx 1.0
 
 Item {
 

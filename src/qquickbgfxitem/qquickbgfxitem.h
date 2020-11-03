@@ -1,20 +1,20 @@
 #pragma once
 #include <QQuickItem>
 
-class BgfxNode;
+class QSGBgfxNode;
 
 using MousePosition = std::array<int, 2>;
 
-class BgfxItem : public QQuickItem
+class QQuickBgfxItem : public QQuickItem
 {
     Q_OBJECT
     Q_PROPERTY(int viewId READ viewId WRITE setViewId NOTIFY viewIdChanged)
     Q_PROPERTY(QColor backgroundColor READ backgroundColor WRITE setBackgroundColor NOTIFY backgroundColorChanged)
-    QML_ELEMENT
+    QML_NAMED_ELEMENT(BgfxItem)
 
 public:
-    BgfxItem();
-    ~BgfxItem();
+    QQuickBgfxItem();
+    ~QQuickBgfxItem();
 
     uint16_t viewId() const { return m_viewId; }
     void setViewId(uint16_t viewId);
@@ -44,7 +44,7 @@ protected:
 private:
     void releaseResources() override;
 
-    std::unique_ptr<BgfxNode> m_node;
+    std::unique_ptr<QSGBgfxNode> m_node;
     uint16_t m_viewId{0};
     QColor m_backgroundColor;
     MousePosition m_mousePos{0, 0};

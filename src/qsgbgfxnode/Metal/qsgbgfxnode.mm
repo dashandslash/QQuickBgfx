@@ -1,6 +1,6 @@
-#include "bgfx_node.h"
+#include "qsgbgfxnode.h"
 
-#include "bgfx_renderer.h"
+#include "qbgfx.h"
 
 #include <QSGTexture>
 #include <QQuickItem>
@@ -10,7 +10,7 @@
 #include <Metal/Metal.h>
 
 
-BgfxNode::BgfxNode(const uint16_t viewId, QQuickItem *item)
+QSGBgfxNode::QSGBgfxNode(const uint16_t viewId, QQuickItem *item)
 : m_item(item), m_viewId(viewId)
 {
     m_window = m_item->window();
@@ -22,17 +22,17 @@ BgfxNode::BgfxNode(const uint16_t viewId, QQuickItem *item)
     qDebug() << "BgfxNode created, view id: " << viewId;
 }
 
-BgfxNode::~BgfxNode()
+QSGBgfxNode::~QSGBgfxNode()
 {
     qDebug() << "BgfxNode destroyed, view id: " << m_viewId;
 }
 
-QSGTexture *BgfxNode::texture() const
+QSGTexture *QSGBgfxNode::texture() const
 {
     return QSGSimpleTextureNode::texture();
 }
 
-void BgfxNode::sync()
+void QSGBgfxNode::sync()
 {
     m_dpr = m_window->effectiveDevicePixelRatio();
     const auto newSize = rect().size().toSize() * m_dpr;
