@@ -35,22 +35,15 @@ QSGTexture *QSGBgfxNode::texture() const
 void QSGBgfxNode::sync()
 {
     m_dpr = m_window->effectiveDevicePixelRatio();
-    const auto newSize = rect().size().toSize() * m_dpr;
-    if(newSize.isEmpty())
-        return;
-    const auto width = static_cast<uint16_t >(newSize.width());
-    const auto height = static_cast<uint16_t >(newSize.height());
-    bool needsNew = false;
+    const auto newSize = (rect().size() * m_dpr).toSize();
+    assert(!newSize.isEmpty());
 
-    if (!texture())
-        needsNew = true;
-
-    if (newSize != m_size) {
-        needsNew = true;
+    // In case there is no qsgtexture attached to the node or the node has a new size
+    if (!texture() || (newSize != m_size)) {
         m_size = newSize;
-    }
+        const auto width = static_cast<uint16_t >(newSize.width());
+        const auto height = static_cast<uint16_t >(newSize.height());
 
-    if (needsNew) {
         QSGRendererInterface *rif = m_window->rendererInterface();
 
         if (texture())
