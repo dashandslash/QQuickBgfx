@@ -38,13 +38,15 @@ QSGNode* QQuickBgfxItem::updatePaintNode(QSGNode *oldNode, UpdatePaintNodeData *
     {
         m_node = std::make_unique<QSGBgfxNode>(m_viewId, this);
     }
-     
-    m_node->setRect(boundingRect());
 
-    m_node->sync();
-
-    m_node->setTextureCoordinatesTransform(QSGSimpleTextureNode::NoTransform);
-    m_node->setFiltering(QSGTexture::Linear);
+    if (m_node->rect().size().toSize() != size)
+    {
+        m_node->setRect(boundingRect());
+        m_node->sync();
+        m_node->setTextureCoordinatesTransform(QSGSimpleTextureNode::NoTransform);
+        m_node->setFiltering(QSGTexture::Linear);
+    }
+    update();
 
     return m_node.get();
 }
