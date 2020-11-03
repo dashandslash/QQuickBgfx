@@ -28,7 +28,7 @@ Item {
         }
         
         SequentialAnimation on backgroundColor {
-            ColorAnimation { to: "black"; duration: 2000 }
+            ColorAnimation { to: "white"; duration: 2000 }
             ColorAnimation { to: "#3369ff"; duration: 2000 }
             loops: Animation.Infinite
             running: true
@@ -46,7 +46,7 @@ Item {
         backgroundColor: "#ff69ff"
         
         SequentialAnimation on backgroundColor {
-            ColorAnimation { to: "black"; duration: 2000 }
+            ColorAnimation { to: "white"; duration: 2000 }
             ColorAnimation { to: "#ff69ff"; duration: 2000 }
             loops: Animation.Infinite
             running: true
@@ -75,7 +75,7 @@ Item {
         backgroundColor: "#4fa92f"
 
         SequentialAnimation on backgroundColor {
-            ColorAnimation { to: "black"; duration: 2000 }
+            ColorAnimation { to: "white"; duration: 2000 }
             ColorAnimation { to: "#4fa92f"; duration: 2000 }
             loops: Animation.Infinite
             running: true

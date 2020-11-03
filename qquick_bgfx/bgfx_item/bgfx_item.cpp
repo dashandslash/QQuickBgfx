@@ -6,7 +6,9 @@
 
 BgfxItem::BgfxItem()
 {
-    setFlag(ItemHasContents, true);
+    setAcceptedMouseButtons(Qt::AllButtons);
+    setFlag(QQuickItem::ItemAcceptsInputMethod);
+    setFlag(QQuickItem::ItemHasContents);
 }
 
 BgfxItem::~BgfxItem() = default;
@@ -53,6 +55,34 @@ void BgfxItem::geometryChange(const QRectF &newGeometry, const QRectF &oldGeomet
 
     if (newGeometry.size() != oldGeometry.size())
         update();
+}
+
+void BgfxItem::mouseMoveEvent(QMouseEvent *event)
+{
+    QQuickItem::mouseMoveEvent(event);
+    m_mousePos = {event->position().toPoint().x(), event->position().toPoint().y()};
+}
+
+void BgfxItem::mousePressEvent(QMouseEvent *event)
+{
+    if(!(event->button() & acceptedMouseButtons()))
+    {
+        QQuickItem::mousePressEvent(event);
+        return;
+    }
+    m_mousePos = {event->position().toPoint().x(), event->position().toPoint().y()};
+    event->setAccepted(true);
+}
+
+void BgfxItem::mouseReleaseEvent(QMouseEvent *event)
+{
+    if(!(event->button() & acceptedMouseButtons()))
+    {
+        QQuickItem::mouseReleaseEvent(event);
+        return;
+    }
+    m_mousePos = {event->position().toPoint().x(), event->position().toPoint().y()};
+    event->setAccepted(true);
 }
 
 void BgfxItem::setViewId(uint16_t viewId)

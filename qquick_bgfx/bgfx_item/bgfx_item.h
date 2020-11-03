@@ -3,6 +3,8 @@
 
 class BgfxNode;
 
+using MousePosition = std::array<int, 2>;
+
 class BgfxItem : public QQuickItem
 {
     Q_OBJECT
@@ -20,6 +22,11 @@ public:
     QColor backgroundColor() const { return m_backgroundColor; }
     void setBackgroundColor(QColor color);
 
+    MousePosition mousePosition()
+    {
+        return m_mousePos;
+    }
+
 signals:
     void viewIdChanged();
     void backgroundColorChanged();
@@ -27,6 +34,9 @@ signals:
 protected:
     QSGNode *updatePaintNode(QSGNode *, UpdatePaintNodeData *) override;
     void geometryChange(const QRectF &newGeometry, const QRectF &oldGeometry) override;
+    void mouseMoveEvent(QMouseEvent *event) override;
+    void mousePressEvent(QMouseEvent *event) override;
+    void mouseReleaseEvent(QMouseEvent *event) override;
 
     private slots:
     void invalidateSceneGraph();
@@ -37,4 +47,5 @@ private:
     std::unique_ptr<BgfxNode> m_node;
     uint16_t m_viewId{0};
     QColor m_backgroundColor;
+    MousePosition m_mousePos{0, 0};
 };

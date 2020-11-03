@@ -26,7 +26,7 @@ void render_example(const std::vector<BgfxItem*>& bgfxItems)
             float b{0.0f};
             item->backgroundColor().getRgbF(&r, &g, &b);
 
-            const uint32_t color = uint8_t(r * 255) << 24 | uint8_t(g * 255) << 16 | uint8_t(b * 255) << 8 | 255;
+            const uint32_t color = uint8_t((item->mousePosition()[1] / item->height()) * r * 255) << 24 | uint8_t((item->mousePosition()[1] / item->height()) * g * 255) << 16 | uint8_t((item->mousePosition()[1] / item->height()) * b * 255) << 8 | 255;
 
             bgfx::setViewClear(item->viewId(), BGFX_CLEAR_COLOR|BGFX_CLEAR_DEPTH, color, 1.0f, 0);
             bgfx::touch(item->viewId());
