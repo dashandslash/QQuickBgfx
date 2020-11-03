@@ -1,8 +1,7 @@
 #include "qquickbgfxitem.h"
 
-#include "qsgbgfxnode/Metal/qsgbgfxnode.h"
 #include "qquick_bgfx.h"
-
+#include "qsgbgfxnode/Metal/qsgbgfxnode.h"
 
 QQuickBgfxItem::QQuickBgfxItem()
 {
@@ -25,7 +24,7 @@ void QQuickBgfxItem::releaseResources()
     m_node.reset();
 }
 
-QSGNode* QQuickBgfxItem::updatePaintNode(QSGNode *oldNode, UpdatePaintNodeData *)
+QSGNode *QQuickBgfxItem::updatePaintNode(QSGNode *oldNode, UpdatePaintNodeData *)
 {
     QSGBgfxNode *node = static_cast<QSGBgfxNode *>(oldNode);
     const auto size = boundingRect().size().toSize();
@@ -67,7 +66,7 @@ void QQuickBgfxItem::mouseMoveEvent(QMouseEvent *event)
 
 void QQuickBgfxItem::mousePressEvent(QMouseEvent *event)
 {
-    if(!(event->button() & acceptedMouseButtons()))
+    if (!(event->button() & acceptedMouseButtons()))
     {
         QQuickItem::mousePressEvent(event);
         return;
@@ -78,7 +77,7 @@ void QQuickBgfxItem::mousePressEvent(QMouseEvent *event)
 
 void QQuickBgfxItem::mouseReleaseEvent(QMouseEvent *event)
 {
-    if(!(event->button() & acceptedMouseButtons()))
+    if (!(event->button() & acceptedMouseButtons()))
     {
         QQuickItem::mouseReleaseEvent(event);
         return;

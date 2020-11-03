@@ -2,10 +2,9 @@
 #include <bgfx/bgfx.h>
 #include <bgfx/platform.h>
 
-
 namespace QQuickBgfx {
 template<bgfx::RendererType::Enum T>
-bgfx::Init init(void* windowHandle, void* context, const uint16_t width, const uint16_t height);
+bgfx::Init init(void *windowHandle, void *context, const uint16_t width, const uint16_t height);
 
 inline bool initialized()
 {
@@ -14,10 +13,10 @@ inline bool initialized()
 
 inline void frame()
 {
-    if(initialized())
+    if (initialized())
     {
         bgfx::frame();
     }
 }
 
-}
+}    // namespace QQuickBgfx

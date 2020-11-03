@@ -7,34 +7,32 @@
 
 #include <vector>
 
-
 class QQmlEngine;
 class QQuickWindow;
 
-namespace QQuickBgfx
-{
+namespace QQuickBgfx {
 class QBgfx : public QObject
 {
     Q_OBJECT
 public:
-QBgfx() = delete;
-QBgfx(QQuickWindow *, const QList<QQuickBgfxItem*>);
+    QBgfx() = delete;
+    QBgfx(QQuickWindow *, const QList<QQuickBgfxItem *>);
 
-~QBgfx();
+    ~QBgfx();
 
 private slots:
 
-void renderFrame();
-void shutdown();
-void init();
+    void renderFrame();
+    void shutdown();
+    void init();
 
 signals:
-void render(const std::vector<QQuickBgfxItem*>&);
-void initialized(bgfx::Init&);
+    void render(const std::vector<QQuickBgfxItem *> &);
+    void initialized(bgfx::Init &);
 
 private:
-std::vector<QQuickBgfxItem*> m_bgfxItems;
-QQuickWindow* m_window{nullptr};
-bgfx::Init m_bgfxInit;
+    std::vector<QQuickBgfxItem *> m_bgfxItems;
+    QQuickWindow *m_window{nullptr};
+    bgfx::Init m_bgfxInit;
 };
-}
+}    // namespace QQuickBgfx

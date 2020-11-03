@@ -1,9 +1,8 @@
 #pragma once
-#include <QtQuick/QSGTextureProvider>
 #include <QSGSimpleTextureNode>
+#include <QtQuick/QSGTextureProvider>
 
 #include <bgfx/bgfx.h>
-
 
 class QSGBgfxNode : public QSGTextureProvider, public QSGSimpleTextureNode
 {
@@ -17,7 +16,6 @@ public:
     void sync();
 
 private:
-
     QQuickItem *m_item;
     QQuickWindow *m_window;
     QSizeF m_size;
@@ -26,8 +24,8 @@ private:
     bgfx::FrameBufferHandle m_offscreenFB{bgfx::kInvalidHandle};
     bgfx::TextureHandle m_backBuffer{bgfx::kInvalidHandle};
     bgfx::TextureHandle m_depthBuffer{bgfx::kInvalidHandle};
-    
+
     uint16_t m_viewId{0};
     uint64_t m_frameCount{0};
-    void* m_texture{nullptr};
+    void *m_texture{nullptr};
 };

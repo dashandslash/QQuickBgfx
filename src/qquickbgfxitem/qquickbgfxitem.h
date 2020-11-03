@@ -22,10 +22,7 @@ public:
     QColor backgroundColor() const { return m_backgroundColor; }
     void setBackgroundColor(QColor color);
 
-    MousePosition mousePosition()
-    {
-        return m_mousePos;
-    }
+    MousePosition mousePosition() { return m_mousePos; }
 
 signals:
     void viewIdChanged();
@@ -38,7 +35,7 @@ protected:
     void mousePressEvent(QMouseEvent *event) override;
     void mouseReleaseEvent(QMouseEvent *event) override;
 
-    private slots:
+private slots:
     void invalidateSceneGraph();
 
 private:
