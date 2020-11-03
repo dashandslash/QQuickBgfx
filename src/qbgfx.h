@@ -33,8 +33,8 @@ void render(const std::vector<QQuickBgfxItem*>&);
 void initialized(bgfx::Init&);
 
 private:
-std::vector<QQuickBgfxItem*> bgfxItems;
-QQuickWindow* window{nullptr};
+std::vector<QQuickBgfxItem*> m_bgfxItems;
+QQuickWindow* m_window{nullptr};
 bgfx::Init m_bgfxInit;
 };
 }
