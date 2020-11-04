@@ -38,7 +38,6 @@ target_link_libraries(BgfxQQuickItemExample PUBLIC
 
 target_include_directories(BgfxQQuickItemExample
                             PUBLIC
-                            ${CMAKE_SOURCE_DIR}
                             ${CMAKE_SOURCE_DIR}/src
                             ${CMAKE_SOURCE_DIR}/src/qquickbgfxitem
                             )
