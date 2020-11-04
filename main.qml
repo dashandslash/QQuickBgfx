@@ -29,8 +29,8 @@ Item {
         }
 
         SequentialAnimation on backgroundColor {
-            ColorAnimation { to: "white"; duration: 2000 }
-            ColorAnimation { to: "#3369ff"; duration: 1500 }
+            ColorAnimation { to: "#3369ff"; duration: 2000 }
+            ColorAnimation { to: bgfxItem2.backgroundColor; duration: 1500 }
             loops: Animation.Infinite
             running: true
         }
@@ -54,8 +54,8 @@ Item {
         backgroundColor: "#ff69ff"
 
         SequentialAnimation on backgroundColor {
-            ColorAnimation { to: "white"; duration: 1500 }
-            ColorAnimation { to: "#ff69ff"; duration: 1400 }
+            ColorAnimation { to: "#ff69ff"; duration: 1500 }
+            ColorAnimation { to: bgfxItem3.backgroundColor; duration: 1400 }
             loops: Animation.Infinite
             running: true
         }
@@ -90,8 +90,8 @@ Item {
         backgroundColor: "#4fa92f"
 
         SequentialAnimation on backgroundColor {
-            ColorAnimation { to: "white"; duration: 1600 }
-            ColorAnimation { to: "#4fa92f"; duration: 1200 }
+            ColorAnimation { to: "#4fa92f"; duration: 1600 }
+            ColorAnimation { to: bgfxItem1.backgroundColor; duration: 1200 }
             loops: Animation.Infinite
             running: true
         }
