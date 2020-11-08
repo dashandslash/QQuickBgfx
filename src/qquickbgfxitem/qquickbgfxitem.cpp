@@ -44,6 +44,8 @@ QSGNode *QQuickBgfxItem::updatePaintNode(QSGNode *oldNode, UpdatePaintNodeData *
         m_node->sync();
         m_node->setTextureCoordinatesTransform(QSGSimpleTextureNode::NoTransform);
         m_node->setFiltering(QSGTexture::Linear);
+        m_dprWidth = width() * window()->devicePixelRatio();
+        m_dprHeight = height() * window()->devicePixelRatio();
     }
     update();
 

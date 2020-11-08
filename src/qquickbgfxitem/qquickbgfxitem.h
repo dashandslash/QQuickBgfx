@@ -24,6 +24,10 @@ public:
 
     MousePosition mousePosition() { return m_mousePos; }
 
+    uint16_t dprWidth() const { return m_dprWidth; }
+
+    uint16_t dprHeight() const { return m_dprHeight; }
+
 signals:
     void viewIdChanged();
     void backgroundColorChanged();
@@ -45,4 +49,6 @@ private:
     uint16_t m_viewId{0};
     QColor m_backgroundColor;
     MousePosition m_mousePos{0, 0};
+    uint16_t m_dprWidth{0u};
+    uint16_t m_dprHeight{0u};
 };

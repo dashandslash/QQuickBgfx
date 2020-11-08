@@ -34,6 +34,7 @@ target_link_libraries(BgfxQQuickItemExample PUBLIC
     Qt::Quick
     Qt::QuickPrivate
     bgfx
+    example-common
 )
 
 target_include_directories(BgfxQQuickItemExample

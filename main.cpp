@@ -5,6 +5,8 @@
 #include <QQuickView>
 
 #include <bgfx/bgfx.h>
+#include <bx/bx.h>
+#include <debugdraw/debugdraw.h>
 
 //init_example initialize bgfx from a gien bgfx::Init
 void init_example(const bgfx::Init& init)
@@ -12,6 +14,7 @@ void init_example(const bgfx::Init& init)
     bgfx::renderFrame();
     bgfx::init(init);
     bgfx::setDebug(BGFX_DEBUG_TEXT);
+    ddInit();
 }
 
 //render_example runs the rendering code
@@ -32,6 +35,36 @@ void render_example(const std::vector<QQuickBgfxItem*>& bgfxItems)
 
             bgfx::setViewClear(item->viewId(), BGFX_CLEAR_COLOR|BGFX_CLEAR_DEPTH, color, 1.0f, 0);
             bgfx::touch(item->viewId());
+
+            const auto w = item->dprWidth();
+            const auto h = item->dprHeight();
+
+            const bx::Vec3 at  = { 0.0f, 0.0f,   0.0f };
+			const bx::Vec3 eye = { 0.0f, 0.0f, -5.0f };
+
+            float view[16];
+            bx::mtxLookAt(view, eye, at);
+
+            float proj[16];
+            bx::mtxProj(proj, 60.0f, float(w)/float(h), 0.1f, 100.0f, bgfx::getCaps()->homogeneousDepth);
+            bgfx::setViewTransform(item->viewId(), view, proj);
+            bgfx::setViewRect(item->viewId(), 0, 0, uint16_t(w), uint16_t(h) );
+
+            DebugDrawEncoder dde;
+            dde.begin(item->viewId());
+
+            static float time = 0.0f;
+            time += 0.003f;
+            float mtx[16];
+            bx::mtxRotateXY(mtx, time + float(item->mousePosition()[0]/ item->width()) * 10.0f, time + float(item->mousePosition()[1]/ item->height()) * 10.0f);
+
+            dde.setTransform(&mtx);
+            dde.drawCapsule({-2.0f, -2.0f, 0.0f}, {-2.0f, 0.0f, 0.0f}, 1.0);
+            dde.drawCone({3.0f, -2.0f, 0.0f}, {3.0f, 2.0f, 0.0f}, 1.0f);
+            dde.draw(Aabb{{0.0f, 0.0f, 0.0f}, {1.0f, 1.0f, 1.0f}});
+            dde.drawAxis(0.0f, 0.0f, 0.0f);
+
+            dde.end();
         }
     }
 }
