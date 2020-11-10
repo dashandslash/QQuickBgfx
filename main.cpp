@@ -5,16 +5,20 @@
 #include <QQuickView>
 
 #include <bgfx/bgfx.h>
+#include <qquick_bgfx.h>
 #include <bx/bx.h>
 #include <debugdraw/debugdraw.h>
 
 //init_example initialize bgfx from a gien bgfx::Init
 void init_example(const bgfx::Init& init)
 {
-    bgfx::renderFrame();
-    bgfx::init(init);
-    bgfx::setDebug(BGFX_DEBUG_TEXT);
-    ddInit();
+    if (!QQuickBgfx::initialized())
+    {
+        bgfx::renderFrame();
+        bgfx::init(init);
+        bgfx::setDebug(BGFX_DEBUG_TEXT);
+        ddInit();
+    }
 }
 
 //render_example runs the rendering code
@@ -73,7 +77,12 @@ int main(int argc, char **argv)
 {
     QGuiApplication app(argc, argv);
 
+#if(WIN32)
+    QQuickWindow::setGraphicsApi(QSGRendererInterface::Direct3D11Rhi);
+#else
     QQuickWindow::setGraphicsApi(QSGRendererInterface::MetalRhi);
+#endif
+    
 
     QQuickView view;
     view.setResizeMode(QQuickView::SizeRootObjectToView);

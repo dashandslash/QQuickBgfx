@@ -14,17 +14,39 @@ find_package(Qt6 COMPONENTS Gui)
 find_package(Qt6 COMPONENTS Qml)
 find_package(Qt6 COMPONENTS Quick)
 
-qt_add_executable(BgfxQQuickItemExample
+set(SOURCES
+
     main.cpp
     src/qquickbgfxitem/qquickbgfxitem.h
     src/qquickbgfxitem/qquickbgfxitem.cpp
-    src/qsgbgfxnode/Metal/qsgbgfxnode.h
-    src/qsgbgfxnode/Metal/qsgbgfxnode.mm
     src/qbgfx.h
     src/qbgfx.cpp
-    src/qquick_bgfx.mm
     src/qquick_bgfx.h
 )
+if(APPLE)
+    set(SOURCES
+        ${SOURCES}
+        src/qquick_bgfx.mm
+        src/qsgbgfxnode/Metal/qsgbgfxnode.h
+        src/qsgbgfxnode/Metal/qsgbgfxnode.mm
+    )
+endif()
+
+if(WIN32)
+    set(SOURCES
+        ${SOURCES}
+        src/qquick_bgfx.cpp
+        src/qsgbgfxnode/D3D/qsgbgfxnode.h
+        src/qsgbgfxnode/D3D/qsgbgfxnode.cpp
+    )
+endif()
+
+
+qt_add_executable(BgfxQQuickItemExample
+    ${SOURCES}
+)
+
+
 
 target_link_libraries(BgfxQQuickItemExample PUBLIC
     "-framework Metal"
@@ -34,6 +56,7 @@ target_link_libraries(BgfxQQuickItemExample PUBLIC
     Qt::Quick
     Qt::QuickPrivate
     bgfx
+    bimg
     example-common
 )
 

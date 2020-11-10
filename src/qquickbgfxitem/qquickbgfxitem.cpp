@@ -38,7 +38,8 @@ QSGNode *QQuickBgfxItem::updatePaintNode(QSGNode *oldNode, UpdatePaintNodeData *
         m_node = std::make_unique<QSGBgfxNode>(m_viewId, this);
     }
 
-    if (m_node->rect().size().toSize() != size)
+    qDebug() << m_node->rect().size().toSize();
+    if (m_node->rect().size().toSize() != size && !size.isEmpty())
     {
         m_node->setRect(boundingRect());
         m_node->sync();
