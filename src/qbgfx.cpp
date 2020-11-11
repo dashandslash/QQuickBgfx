@@ -40,14 +40,16 @@ void QBgfx::init()
     switch (rif->graphicsApi())
     {
         case QSGRendererInterface::MetalRhi:
-#ifdef __APPLE_
+#ifdef __APPLE__
             m_bgfxInit = QQuickBgfx::init<bgfx::RendererType::Metal>(winHandle, context, m_window->width() * dpr,
                                                                      m_window->height() * dpr);
 #endif
             break;
         case QSGRendererInterface::Direct3D11Rhi:
+#ifdef _WIN32
                 m_bgfxInit = QQuickBgfx::init<bgfx::RendererType::Direct3D11>(winHandle, context, m_window->width() * dpr,
                     m_window->height() * dpr);
+#endif
         break;
         default:
             throw std::runtime_error("Invalid or not implemented Graphics Api");
