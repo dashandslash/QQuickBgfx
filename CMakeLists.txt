@@ -22,13 +22,13 @@ set(SOURCES
     src/qbgfx.h
     src/qbgfx.cpp
     src/qquick_bgfx.h
+    src/qsgbgfxnode/qsgbgfxnode.h
+    src/qsgbgfxnode/qsgbgfxnode.cpp
 )
 if(APPLE)
     set(SOURCES
         ${SOURCES}
         src/qquick_bgfx.mm
-        src/qsgbgfxnode/Metal/qsgbgfxnode.h
-        src/qsgbgfxnode/Metal/qsgbgfxnode.mm
     )
 endif()
 
@@ -36,8 +36,6 @@ if(WIN32)
     set(SOURCES
         ${SOURCES}
         src/qquick_bgfx.cpp
-        src/qsgbgfxnode/D3D/qsgbgfxnode.h
-        src/qsgbgfxnode/D3D/qsgbgfxnode.cpp
     )
 endif()
 
