@@ -15,7 +15,7 @@ using namespace QQuickBgfx;
 QBgfx::QBgfx(QQuickWindow *w, const QList<QQuickBgfxItem *> items): m_window(w)
 {
     //Qt::DirectConnection needs to be specified in order to call the slot from the signal thread
-    connect(m_window, &QQuickWindow::sceneGraphInitialized, this, &QBgfx::init, Qt::DirectConnection);
+    connect(m_window, &QQuickWindow::beforeFrameBegin, this, &QBgfx::init, Qt::DirectConnection);
     connect(m_window, &QQuickWindow::beforeRenderPassRecording, this, &QBgfx::renderFrame, Qt::DirectConnection);
     //Free standing function instead will always be called from the signal thread
     connect(m_window, &QQuickWindow::afterRenderPassRecording, QQuickBgfx::frame);
