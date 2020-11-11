@@ -70,7 +70,7 @@ void QSGBgfxNode::sync()
         std::array<bgfx::Attachment, 2> m_attachments{};
         auto &[colorAttachment, depthAttachment] = m_attachments;
         colorAttachment.init(m_backBuffer, bgfx::Access::Write, 0);
-        depthAttachment.init(m_depthBuffer, bgfx::Access::Write, 1);
+        depthAttachment.init(m_depthBuffer, bgfx::Access::Write, 0);
         
         if(bgfx::isValid(m_offscreenFB))
         {
