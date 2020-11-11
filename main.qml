@@ -120,18 +120,41 @@ Item {
         radius: 10
         border.width: 1
         border.color: "white"
-        anchors.fill: label
+        anchors.top: label1.top
+        anchors.right: label1.right
+        anchors.left: label1.left
+        anchors.bottom: label3.bottom
         anchors.margins: -10
     }
 
     Text {
-        id: label
+        id: label1
         color: "black"
-        wrapMode: Text.WordWrap
-        text: "Click and drag mouse over the height of each BgfxItem to change the color luminance at render time. BgfxItem background color is updated from SequentialAnimation in main.qml."
+        // wrapMode: Text.WordWrap
+        text: "Drag mouse over the height: change Bgfx color luminance at render time. Change camera Z coord."
+        anchors.right: parent.right
+        anchors.left: parent.left
+        anchors.bottom: label2.top
+        anchors.margins: 2
+    }
+    Text {
+        id: label2
+        color: "black"
+        // wrapMode: Text.WordWrap
+        text: "Drag mouse over the width: change camera X coord."
+        anchors.right: parent.right
+        anchors.left: parent.left
+        anchors.bottom: label3.top
+        anchors.margins: 2
+    }
+    Text {
+        id: label3
+        color: "black"
+        // wrapMode: Text.WordWrap
+        text: "BgfxItem background color is animated using SequentialAnimation in main.qml."
         anchors.right: parent.right
         anchors.left: parent.left
         anchors.bottom: parent.bottom
-        anchors.margins: 20
+        anchors.margins: 2
     }
 }
