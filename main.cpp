@@ -46,7 +46,7 @@ void render_example(const std::vector<QQuickBgfxItem*>& bgfxItems)
             time += 0.003f;
 
             const bx::Vec3 at  = { 0.0f, 0.0f,   0.0f };
-			const bx::Vec3 eye = { (item->mousePosition()[0]/ (float)item->width()-0.5f) * 10.0f, 0.0f, (item->mousePosition()[1]/ (float)item->width()-0.5f) * 10.0f };
+			const bx::Vec3 eye = { std::clamp(item->mousePosition()[0]/ (float)item->width()-0.5f, -0.5f, 0.5f) * 15.0f, 0.0f, std::clamp(item->mousePosition()[1] / (float)item->height()-0.5f, -0.5f, 0.5f) * 15.0f };
 
             float view[16];
             bx::mtxLookAt(view, eye, at);
