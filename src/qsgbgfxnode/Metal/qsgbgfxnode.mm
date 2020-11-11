@@ -49,7 +49,6 @@ void QSGBgfxNode::sync()
         if (texture())
         {
             texture()->deleteLater();
-            [static_cast<id<MTLTexture>>(m_texture) release];
         }
         if(bgfx::isValid(m_backBuffer))
         {
@@ -61,51 +60,35 @@ void QSGBgfxNode::sync()
             bgfx::destroy(m_depthBuffer);
         }
 
-        m_backBuffer = bgfx::createTexture2D(width, height, false, 2, bgfx::TextureFormat::RGBA8, BGFX_TEXTURE_RT, NULL);
-        m_depthBuffer = bgfx::createTexture2D(width, height, false, 2, bgfx::TextureFormat::D24S8, BGFX_TEXTURE_RT, NULL);
+        m_backBuffer = bgfx::createTexture2D(width, height, false, 1, bgfx::TextureFormat::RGBA8, BGFX_TEXTURE_RT, NULL);
+        m_depthBuffer = bgfx::createTexture2D(width, height, false, 1, bgfx::TextureFormat::D24S8, BGFX_TEXTURE_RT, NULL);
         
         // The call to frame() is necessary to actually construct the textures in GPU
         bgfx::frame();
 
-        // create a native render target texture
-        MTLTextureDescriptor *desc = [[MTLTextureDescriptor alloc] init];
-        desc.textureType = MTLTextureType2D;
-        desc.pixelFormat = MTLPixelFormatRGBA8Unorm;
-        desc.width = static_cast<NSUInteger>(width);
-        desc.height = static_cast<NSUInteger>(height);
-        desc.mipmapLevelCount = 1;
-        desc.resourceOptions = MTLResourceStorageModePrivate;
-        desc.storageMode = MTLStorageModePrivate;
-        desc.usage = MTLTextureUsageShaderRead | MTLTextureUsageRenderTarget;
-        const auto device = (id<MTLDevice>) rif->getResource(m_window, QSGRendererInterface::DeviceResource);
-        assert(device);
-        m_texture = [device newTextureWithDescriptor: desc];
-        [desc release];
-        
-        // create a QSGTexture from the native texture
-        const auto qsgtexture = QNativeInterface::QSGMetalTexture::fromNative(static_cast<id<MTLTexture>>(m_texture), m_window, m_window->size());
-        
-        // override the internal bgfx native texture handler which will be the color attachement of the framebuffer
-        [[maybe_unused]] const auto newBgfxInternalId =
-        bgfx::overrideInternal(m_backBuffer, uintptr_t(m_texture));
-        assert(newBgfxInternalId != bgfx::kInvalidHandle);
-
         std::array<bgfx::Attachment, 2> m_attachments{};
         auto &[colorAttachment, depthAttachment] = m_attachments;
         colorAttachment.init(m_backBuffer, bgfx::Access::Write, 0);
-        depthAttachment.init(m_depthBuffer, bgfx::Access::Write, 1);
+        depthAttachment.init(m_depthBuffer, bgfx::Access::Write, 0);
         
         if(bgfx::isValid(m_offscreenFB))
         {
             bgfx::destroy(m_offscreenFB);
         }
 
-        m_offscreenFB = bgfx::createFrameBuffer(m_attachments.size(), m_attachments.data(), false);
-        
+        m_offscreenFB = bgfx::createFrameBuffer(m_attachments.size(), m_attachments.data(), true);
+
+        bgfx::frame();
+
+        m_texture = (void*)bgfx::getInternal(m_backBuffer);
+
+        // create a QSGTexture from the native texture
+        const auto qsgtexture = QNativeInterface::QSGMetalTexture::fromNative(static_cast<id<MTLTexture>>(m_texture), m_window, m_window->size());
+
         bgfx::setViewFrameBuffer(m_viewId, m_offscreenFB);
 
         bgfx::setViewRect(m_viewId, 0, 0, width, height);
-        
+
         // assign the QSGTexture to the node
         setTexture(qsgtexture);
     }
