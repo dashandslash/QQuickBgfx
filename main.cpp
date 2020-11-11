@@ -32,7 +32,7 @@ void render_example(const std::vector<QQuickBgfxItem*>& bgfxItems)
             float g{0.0f};
             float b{0.0f};
             auto c = item->backgroundColor();
-            c.setHslF(c.hueF(), c.saturationF(), c.lightnessF() * item->mousePosition()[1] / item->height());
+            c.setHslF(c.hueF(), c.saturationF(), c.lightnessF() * std::clamp(item->mousePosition()[1] / (float)item->height(), 0.0f, 1.0f));
             c.getRgbF(&r, &g, &b);
 
             const uint32_t color = uint8_t(r * 255) << 24 | uint8_t(g * 255) << 16 | uint8_t(b * 255) << 8 | 255;
@@ -42,9 +42,11 @@ void render_example(const std::vector<QQuickBgfxItem*>& bgfxItems)
 
             const auto w = item->dprWidth();
             const auto h = item->dprHeight();
+            static float time{0.0f};
+            time += 0.003f;
 
             const bx::Vec3 at  = { 0.0f, 0.0f,   0.0f };
-			const bx::Vec3 eye = { 0.0f, 0.0f, -5.0f };
+			const bx::Vec3 eye = { (item->mousePosition()[0]/ (float)item->width()-0.5f) * 10.0f, 0.0f, (item->mousePosition()[1]/ (float)item->width()-0.5f) * 10.0f };
 
             float view[16];
             bx::mtxLookAt(view, eye, at);
@@ -54,20 +56,15 @@ void render_example(const std::vector<QQuickBgfxItem*>& bgfxItems)
             bgfx::setViewTransform(item->viewId(), view, proj);
             bgfx::setViewRect(item->viewId(), 0, 0, uint16_t(w), uint16_t(h) );
 
+            float mtx[16];
+            bx::mtxRotateXY(mtx, time, time);
             DebugDrawEncoder dde;
             dde.begin(item->viewId());
-
-            static float time = 0.0f;
-            time += 0.003f;
-            float mtx[16];
-            bx::mtxRotateXY(mtx, time + float(item->mousePosition()[0]/ item->width()) * 10.0f, time + float(item->mousePosition()[1]/ item->height()) * 10.0f);
-
-            dde.setTransform(&mtx);
             dde.drawCapsule({-2.0f, -2.0f, 0.0f}, {-2.0f, 0.0f, 0.0f}, 1.0);
             dde.drawCone({3.0f, -2.0f, 0.0f}, {3.0f, 2.0f, 0.0f}, 1.0f);
-            dde.draw(Aabb{{0.0f, 0.0f, 0.0f}, {1.0f, 1.0f, 1.0f}});
             dde.drawAxis(0.0f, 0.0f, 0.0f);
-
+            dde.setTransform(&mtx);
+            dde.draw(Aabb{{0.0f, 0.0f, 0.0f}, {1.0f, 1.0f, 1.0f}});
             dde.end();
         }
     }
