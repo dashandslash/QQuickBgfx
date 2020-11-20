@@ -4,3 +4,6 @@
 [submodule "deps/brtshaderc"]
 	path = deps/brtshaderc
 	url = git@github.com:fredakilla/brtshaderc.git
+[submodule "deps/entt"]
+	path = deps/entt
+	url = git@github.com:skypjack/entt.git
