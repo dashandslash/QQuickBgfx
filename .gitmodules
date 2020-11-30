@@ -7,3 +7,6 @@
 [submodule "deps/entt"]
 	path = deps/entt
 	url = git@github.com:skypjack/entt.git
+[submodule "deps/glm"]
+	path = deps/glm
+	url = git@github.com:g-truc/glm.git
