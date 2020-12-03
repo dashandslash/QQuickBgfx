@@ -17,13 +17,21 @@ find_package(Qt6 COMPONENTS Quick)
 set(SOURCES
 
     main.cpp
+    src/components/base.h
+    src/components/base.cpp
+    src/engine.h
+    src/engine.cpp
     src/qquickbgfxitem/qquickbgfxitem.h
     src/qquickbgfxitem/qquickbgfxitem.cpp
     src/qbgfx.h
     src/qbgfx.cpp
+    src/qbgfx_utils.h
+    src/qbgfx_utils.cpp
     src/qquick_bgfx.h
     src/qsgbgfxnode/qsgbgfxnode.h
     src/qsgbgfxnode/qsgbgfxnode.cpp
+    src/renderer.h
+    src/renderer.cpp
 )
 if(APPLE)
     set(SOURCES
@@ -55,6 +63,8 @@ target_link_libraries(BgfxQQuickItemExample PUBLIC
     Qt::QuickPrivate
     bgfx
     bimg
+    glm::glm
+    EnTT
     example-common
 )
 

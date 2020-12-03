@@ -7,9 +7,7 @@
 
 #include <stdexcept>
 
-
-QSGBgfxNode::QSGBgfxNode(const uint16_t viewId, QQuickItem *item)
-: m_item(item), m_viewId(viewId)
+QSGBgfxNode::QSGBgfxNode(const uint16_t viewId, QQuickItem *item): m_item(item), m_viewId(viewId)
 {
     m_window = m_item->window();
     connect(m_window, &QQuickWindow::screenChanged, this, [this]() {
@@ -37,27 +35,30 @@ void QSGBgfxNode::sync()
     assert(!newSize.isEmpty());
 
     // In case there is no qsgtexture attached to the node or the node has a new size
-    if (!texture() || (newSize != m_size)) {
+    if (!texture() || (newSize != m_size))
+    {
         m_size = newSize;
-        const auto width = static_cast<uint16_t >(newSize.width());
-        const auto height = static_cast<uint16_t >(newSize.height());
+        const auto width = static_cast<uint16_t>(newSize.width());
+        const auto height = static_cast<uint16_t>(newSize.height());
 
         if (texture())
         {
             texture()->deleteLater();
         }
-        if(bgfx::isValid(m_backBuffer))
+        if (bgfx::isValid(m_backBuffer))
         {
             bgfx::destroy(m_backBuffer);
         }
 
-        if(bgfx::isValid(m_backBuffer))
+        if (bgfx::isValid(m_backBuffer))
         {
             bgfx::destroy(m_depthBuffer);
         }
 
-        m_backBuffer = bgfx::createTexture2D(width, height, false, 1, bgfx::TextureFormat::RGBA8, BGFX_TEXTURE_RT, NULL);
-        m_depthBuffer = bgfx::createTexture2D(width, height, false, 1, bgfx::TextureFormat::D24S8, BGFX_TEXTURE_RT, NULL);
+        m_backBuffer =
+          bgfx::createTexture2D(width, height, false, 1, bgfx::TextureFormat::RGBA8, BGFX_TEXTURE_RT, NULL);
+        m_depthBuffer =
+          bgfx::createTexture2D(width, height, false, 1, bgfx::TextureFormat::D24S8, BGFX_TEXTURE_RT, NULL);
 
         // The call to frame() is necessary to actually construct the textures in GPU
         bgfx::frame();
@@ -67,7 +68,7 @@ void QSGBgfxNode::sync()
         colorAttachment.init(m_backBuffer, bgfx::Access::Write, 0);
         depthAttachment.init(m_depthBuffer, bgfx::Access::Write, 0);
 
-        if(bgfx::isValid(m_offscreenFB))
+        if (bgfx::isValid(m_offscreenFB))
         {
             bgfx::destroy(m_offscreenFB);
         }
@@ -78,24 +79,24 @@ void QSGBgfxNode::sync()
 
         bgfx::setViewRect(m_viewId, 0, 0, width, height);
 
-        m_texture = (void*)bgfx::getInternal(m_backBuffer);
+        m_texture = (void *)bgfx::getInternal(m_backBuffer);
 
-        QSGTexture* qsgtexture{nullptr};
+        QSGTexture *qsgtexture{nullptr};
         switch (bgfx::getRendererType())
         {
-        case bgfx::RendererType::Metal:
+            case bgfx::RendererType::Metal:
 #ifdef __APPLE__
-            qsgtexture = QQuickBgfx::qsgTexture<bgfx::RendererType::Metal>(m_texture, m_window, width, height);
+                qsgtexture = QQuickBgfx::qsgTexture<bgfx::RendererType::Metal>(m_texture, m_window, width, height);
 #endif
-            break;
-        case bgfx::RendererType::Direct3D11:
+                break;
+            case bgfx::RendererType::Direct3D11:
 #ifdef _WIN32
-            qsgtexture = QQuickBgfx::qsgTexture<bgfx::RendererType::Direct3D11>(m_texture, m_window, width, height);
+                qsgtexture = QQuickBgfx::qsgTexture<bgfx::RendererType::Direct3D11>(m_texture, m_window, width, height);
 #endif
-            break;
-        default:
-            throw std::runtime_error("Invalid or not implemented Graphics Api");
-            return;
+                break;
+            default:
+                throw std::runtime_error("Invalid or not implemented Graphics Api");
+                return;
         }
 
         // assign the QSGTexture to the node

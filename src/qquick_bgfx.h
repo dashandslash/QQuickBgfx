@@ -22,8 +22,7 @@ inline void frame()
     }
 }
 
-template <bgfx::RendererType::Enum T>
-QSGTexture* qsgTexture(void* texture, QQuickWindow* window, int w, int h);
-
+template<bgfx::RendererType::Enum T>
+QSGTexture *qsgTexture(void *texture, QQuickWindow *window, int w, int h);
 
 }    // namespace QQuickBgfx

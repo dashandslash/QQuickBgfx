@@ -36,6 +36,8 @@ QSGNode *QQuickBgfxItem::updatePaintNode(QSGNode *oldNode, UpdatePaintNodeData *
     if (!node)
     {
         m_node = std::make_unique<QSGBgfxNode>(m_viewId, this);
+        emit viewIdChanged();
+        emit mouseChanged();
     }
 
     if (m_node->rect().size().toSize() != size && !size.isEmpty())
@@ -46,6 +48,7 @@ QSGNode *QQuickBgfxItem::updatePaintNode(QSGNode *oldNode, UpdatePaintNodeData *
         m_node->setFiltering(QSGTexture::Linear);
         m_dprWidth = width() * window()->devicePixelRatio();
         m_dprHeight = height() * window()->devicePixelRatio();
+        emit geometryChanged();
     }
     update();
 
@@ -58,12 +61,15 @@ void QQuickBgfxItem::geometryChange(const QRectF &newGeometry, const QRectF &old
 
     if (newGeometry.size() != oldGeometry.size())
         update();
+
+    emit geometryChanged();
 }
 
 void QQuickBgfxItem::mouseMoveEvent(QMouseEvent *event)
 {
     QQuickItem::mouseMoveEvent(event);
-    m_mousePos = {event->position().toPoint().x(), event->position().toPoint().y()};
+    m_mousePos = event->position();
+    emit mouseChanged();
 }
 
 void QQuickBgfxItem::mousePressEvent(QMouseEvent *event)
@@ -73,8 +79,9 @@ void QQuickBgfxItem::mousePressEvent(QMouseEvent *event)
         QQuickItem::mousePressEvent(event);
         return;
     }
-    m_mousePos = {event->position().toPoint().x(), event->position().toPoint().y()};
+    m_mousePos = event->position();
     event->setAccepted(true);
+    emit mouseChanged();
 }
 
 void QQuickBgfxItem::mouseReleaseEvent(QMouseEvent *event)
@@ -84,8 +91,9 @@ void QQuickBgfxItem::mouseReleaseEvent(QMouseEvent *event)
         QQuickItem::mouseReleaseEvent(event);
         return;
     }
-    m_mousePos = {event->position().toPoint().x(), event->position().toPoint().y()};
+    m_mousePos = event->position();
     event->setAccepted(true);
+    emit mouseChanged();
 }
 
 void QQuickBgfxItem::setViewId(uint16_t viewId)

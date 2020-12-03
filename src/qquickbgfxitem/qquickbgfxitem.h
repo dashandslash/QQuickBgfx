@@ -22,7 +22,8 @@ public:
     QColor backgroundColor() const { return m_backgroundColor; }
     void setBackgroundColor(QColor color);
 
-    MousePosition mousePosition() { return m_mousePos; }
+    QPointF mousePosition() { return m_mousePos; }
+    Qt::MouseButtons mouseButtons() { return m_mouseButtons; }
 
     uint16_t dprWidth() const { return m_dprWidth; }
 
@@ -31,6 +32,8 @@ public:
 signals:
     void viewIdChanged();
     void backgroundColorChanged();
+    void geometryChanged();
+    void mouseChanged();
 
 protected:
     QSGNode *updatePaintNode(QSGNode *, UpdatePaintNodeData *) override;
@@ -48,7 +51,8 @@ private:
     std::unique_ptr<QSGBgfxNode> m_node;
     uint16_t m_viewId{0};
     QColor m_backgroundColor;
-    MousePosition m_mousePos{0, 0};
+    QPointF m_mousePos{0.0f, 0.0f};
+    Qt::MouseButtons m_mouseButtons;
     uint16_t m_dprWidth{0u};
     uint16_t m_dprHeight{0u};
 };
