@@ -14,10 +14,10 @@ void updateAndClear(entt::registry &r)
         });
     r.remove<components::Update<T>>(v.begin() , v.end());
 }
-template<class... Vs>
-void consolidate(entt::registry &r, const std::variant<Vs...>& v)
+template<typename... Ts>
+void consolidate(entt::registry &r, const std::variant<Ts...>&)
 {
-  (..., ( updateAndClear<Vs>(r) ));
+  (..., ( updateAndClear<Ts>(r) ));
 }
 }
 
