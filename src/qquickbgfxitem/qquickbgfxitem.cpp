@@ -80,6 +80,7 @@ void QQuickBgfxItem::mousePressEvent(QMouseEvent *event)
         return;
     }
     m_mousePos = event->position();
+    m_mouseButtons = event->buttons();
     event->setAccepted(true);
     emit mouseChanged();
 }
@@ -92,6 +93,7 @@ void QQuickBgfxItem::mouseReleaseEvent(QMouseEvent *event)
         return;
     }
     m_mousePos = event->position();
+    m_mouseButtons = event->buttons();
     event->setAccepted(true);
     emit mouseChanged();
 }
