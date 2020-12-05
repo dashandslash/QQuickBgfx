@@ -1,6 +1,6 @@
 #include <qbgfx_utils.h>
 
-#include <camera.h>
+#include <components/camera.h>
 #include <components/base.h>
 #include <qquickbgfxitem/qquickbgfxitem.h>
 
@@ -18,7 +18,7 @@ void QQuickBgfx::utils::connectItemsSignals(entt::registry &registry, const QLis
         registry.emplace<components::ViewPort>(viewEntity);
         registry.emplace<components::Color>(viewEntity);
         registry.emplace<components::Mouse>(viewEntity);
-        auto &cam = registry.emplace<CameraPersp>(viewEntity);
+        auto &cam = registry.emplace<components::CameraPersp>(viewEntity);
         cam.setPerspective(40.0f, 1.0f, 0.1f, 100.0f);
         cam.lookAt(glm::vec3{0.0f, 0.0f, 5.0f}, glm::vec3{0.0f, 0.0f, 0.0f}, glm::vec3{0.0f, 1.0f, 0.0f});
 

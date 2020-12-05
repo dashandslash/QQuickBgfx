@@ -1,5 +1,5 @@
 #pragma once
-#include <camera.h>
+#include <components/camera.h>
 
 #include <glm/glm.hpp>
 

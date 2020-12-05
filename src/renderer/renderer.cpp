@@ -39,7 +39,7 @@ const T& getUpdatedComponent(entt::registry &r, const entt::entity e, const T& c
 
 void renderer::render(const entt::registry &registry)
 {
-    registry.view<const components::ViewId, const components::ViewPort, const components::Mouse, const components::Color, const CameraPersp>().each(
+    registry.view<const components::ViewId, const components::ViewPort, const components::Mouse, const components::Color, const components::CameraPersp>().each(
       [&registry](const auto e, const auto &viewId, const auto &viewport, const auto &mouse, const auto &color, const auto &cam) {
 
           const auto &w = viewport.value.z;

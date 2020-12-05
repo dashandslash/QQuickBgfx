@@ -16,7 +16,6 @@ float lerp(const float &a, const float &b, const float &f)
     return a + f * (b - a);
 }
 
-
 glm::mat4 alignZAxisWithTarget( glm::vec3 targetDir, glm::vec3 upDir )
 {
     // Ensure that the target direction is non-zero.
@@ -57,6 +56,8 @@ glm::mat4 alignZAxisWithTarget( glm::vec3 targetDir, glm::vec3 upDir )
     return glm::make_mat4( v );
 }
 
+namespace components
+{
 void Camera::setEyePoint( const glm::vec3 &eyePoint )
 {
 	mEyePoint = eyePoint;
@@ -373,112 +374,4 @@ void CameraPersp::setLensShift(float horizontal, float vertical)
 
 	mProjectionCached = false;
 }
-
-//CameraPersp	CameraPersp::calcFraming( const Sphere &worldSpaceSphere ) const
-//{
-//	CameraPersp result = *this;
-//	float xDistance = worldSpaceSphere.getRadius() / sin( toRadians( getFovHorizontal() * 0.5f ) );
-//	float yDistance = worldSpaceSphere.getRadius() / sin( toRadians( getFov() * 0.5f ) );
-//	result.setEyePoint( worldSpaceSphere.getCenter() - result.mViewDirection * std::max( xDistance, yDistance ) );
-//	result.mPivotDistance = distance( result.mEyePoint, worldSpaceSphere.getCenter() );
-//	return result;
-//}
-
-//CameraPersp CameraPersp::subdivide( const glm::uvec2& gridSize, const glm::uvec2& gridIndex ) const
-//{
-//	CameraPersp result = *this;
-//	result.setAspectRatio( getAspectRatio() * float( gridSize.x ) / float( gridSize.y ) );
-//	result.setLensShift( vec2( 1.0f ) - vec2( gridSize.y, gridSize.x ) + 2.0f * vec2( gridIndex.y, gridIndex.x ) );
-//	return result;
-//}
-
-//////////////////////////////////////////////////////////////////////////////////////////
-//// CameraOrtho
-//CameraOrtho::CameraOrtho()
-//{
-//	lookAt( glm::vec3( 0, 0, 0.1f ), glm::vec3(), glm::vec3( 0, 1, 0 ) );
-//	setFov( 35 );
-//}
-//
-//CameraOrtho::CameraOrtho( float left, float right, float bottom, float top, float nearPlane, float farPlane )
-//{
-//	mFrustumLeft	= left;
-//	mFrustumRight	= right;
-//	mFrustumTop		= top;
-//	mFrustumBottom	= bottom;
-//	mNearClip		= nearPlane;
-//	mFarClip		= farPlane;
-//
-//	mProjectionCached = false;
-//	mModelViewCached = true;
-//	mInverseModelViewCached = true;
-//}
-//
-//void CameraOrtho::setOrtho( float left, float right, float bottom, float top, float nearPlane, float farPlane )
-//{
-//	mFrustumLeft	= left;
-//	mFrustumRight	= right;
-//	mFrustumTop		= top;
-//	mFrustumBottom	= bottom;
-//	mNearClip		= nearPlane;
-//	mFarClip		= farPlane;
-//
-//	mProjectionCached = false;
-//}
-//
-//void CameraOrtho::calcProjection() const
-//{
-//	mat4 &p = mProjectionMatrix;
-//	p[0][0] =  2 / ( (mFrustumRight - mFrustumLeft) * mAspectRatio );
-//	p[1][0] =  0;
-//	p[2][0] =  0;
-//	p[3][0] =  -(mFrustumRight + mFrustumLeft) / (mFrustumRight - mFrustumLeft) * mAspectRatio;
-//
-//	p[0][1] =  0;
-//	p[1][1] =  2 / (mFrustumTop - mFrustumBottom);
-//	p[2][1] =  0;
-//	p[3][1] =  -(mFrustumTop + mFrustumBottom) / (mFrustumTop - mFrustumBottom);
-//
-//	p[0][2] =  0;
-//	p[1][2] =  0;
-//	p[2][2] = -2 / (mFarClip - mNearClip);
-//	p[3][2] = -(mFarClip + mNearClip) / (mFarClip - mNearClip);
-//
-//	p[0][3] =  0;
-//	p[1][3] =  0;
-//	p[2][3] =  0;
-//	p[3][3] =  1;
-//
-//	mat4 &m = mInverseProjectionMatrix;
-//	m[0][0] =  (mFrustumRight - mFrustumLeft) * 0.5f;
-//	m[1][0] =  0;
-//	m[2][0] =  0;
-//	m[3][0] =  (mFrustumRight + mFrustumLeft) * 0.5f;
-//
-//	m[0][1] =  0;
-//	m[1][1] =  (mFrustumTop - mFrustumBottom) * 0.5f;
-//	m[2][1] =  0;
-//	m[3][1] =  (mFrustumTop + mFrustumBottom) * 0.5f;
-//
-//	m[0][2] =  0;
-//	m[1][2] =  0;
-//	m[2][2] =  (mFarClip - mNearClip) * 0.5f;
-//	m[3][2] =  (mNearClip + mFarClip) * 0.5f;
-//
-//	m[0][3] =  0;
-//	m[1][3] =  0;
-//	m[2][3] =  0;
-//	m[3][3] =  1;
-//
-//	mProjectionCached = true;
-//}
-//
-//Ray CameraOrtho::calcRay( float uPos, float vPos, float imagePlaneAspectRatio ) const
-//{
-//	calcMatrices();
-//
-//	float s = ( uPos - 0.5f ) * imagePlaneAspectRatio;
-//	float t = ( vPos - 0.5f );
-//	glm::vec3  eyePoint = mEyePoint + mU * s * ( mFrustumRight - mFrustumLeft ) + mV * t * ( mFrustumTop - mFrustumBottom );
-//	return Ray( eyePoint, -mW );
-//}
+}

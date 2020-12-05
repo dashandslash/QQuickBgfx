@@ -5,6 +5,8 @@
 #include <glm/gtx/string_cast.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 
+namespace components
+{
 class Camera {
   public:
 	virtual ~Camera() {}
@@ -202,3 +204,4 @@ class CameraPersp : public Camera {
 	void	calcProjection() const override;
 //	Ray		calcRay( float u, float v, float imagePlaneAspectRatio ) const override;
 };
+}

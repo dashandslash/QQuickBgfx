@@ -1,6 +1,6 @@
 #include "camera_system.h"
 #define GLM_SWIZZLE
-#include <camera.h>
+#include <components/camera.h>
 #include <components/base.h>
 
 #include <utility>
@@ -13,7 +13,7 @@ void updateAspectRatio(entt::registry &r)
     });
 }
 
-void zoom(const components::Mouse &m1, const components::Update<components::Mouse> &u, const components::ViewPort &v, CameraPersp &c)
+void zoom(const components::Mouse &m1, const components::Update<components::Mouse> &u, const components::ViewPort &v, components::CameraPersp &c)
 {
     const auto &m2 = u.component;
 //    auto &c = uC.component;
@@ -29,7 +29,7 @@ void zoom(const components::Mouse &m1, const components::Update<components::Mous
     }
 }
 
-void pan(const components::Mouse &m1, const components::Update<components::Mouse> &u, const components::ViewPort &v, CameraPersp &c)
+void pan(const components::Mouse &m1, const components::Update<components::Mouse> &u, const components::ViewPort &v, components::CameraPersp &c)
 {
     const auto &m2 = u.component;
 //    auto &c = uC.component;
@@ -45,7 +45,7 @@ void pan(const components::Mouse &m1, const components::Update<components::Mouse
     }
 }
 
-void orbit(const components::Mouse &m1, const components::Update<components::Mouse> &u, const components::ViewPort &v, CameraPersp &c)
+void orbit(const components::Mouse &m1, const components::Update<components::Mouse> &u, const components::ViewPort &v, components::CameraPersp &c)
 {
     const auto &m2 = u.component;
 //    auto &c = uC.component;
@@ -74,7 +74,7 @@ void orbit(const components::Mouse &m1, const components::Update<components::Mou
 
 void controlCamera(entt::registry &r)
 {
-    r.view<components::Mouse, components::Update<components::Mouse>, components::ViewPort, CameraPersp>().each([](auto e, const auto &m, const auto &uM, const auto &v, auto &c){
+    r.view<components::Mouse, components::Update<components::Mouse>, components::ViewPort, components::CameraPersp>().each([](auto e, const auto &m, const auto &uM, const auto &v, auto &c){
 
 //    auto &uC = registry.get_or_emplace<components::Update<CameraPersp>>(e, c);
 //    const auto &vv = registry.has<components::Update<components::ViewPort>>(e) ? registry.get<components::Update<components::ViewPort>>(e).component : v;

@@ -17,8 +17,8 @@ find_package(Qt6 COMPONENTS Quick)
 set(SOURCES
 
     main.cpp
-    src/camera.h
-    src/camera.cpp
+    src/components/camera.h
+    src/components/camera.cpp
     src/components/base.h
     src/components/base.cpp
     src/engine/engine.h
