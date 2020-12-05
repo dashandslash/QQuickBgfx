@@ -1,3 +1,5 @@
+#define ENTT_USE_ATOMIC
+
 #include <engine.h>
 #include <qquickbgfxitem/qquickbgfxitem.h>
 #include <qbgfx.h>
@@ -16,6 +18,8 @@
 
 #include <iostream>
 
+#include <thread>
+#include <mutex>
 
 entt::registry registry;
 
@@ -41,6 +45,7 @@ int main(int argc, char **argv)
     QObject::connect(&qbgfx, &QQuickBgfx::QBgfx::initialized, renderer::init);
     //Connection to render signal allows to decouple the rendering code from the qquick_bgfx::QBgfx wrapper
     QObject::connect(&qbgfx, &QQuickBgfx::QBgfx::render, [](){
+//        engine::update(registry);
         renderer::render(registry);
     });
 
@@ -50,9 +55,7 @@ int main(int argc, char **argv)
     timer.setTimerType(Qt::PreciseTimer);
     QObject::connect(&timer, &QTimer::timeout, [&]()
     {
-        engine::preUpdate(registry);
         engine::update(registry);
-        engine::postUpdate(registry);
     });
     timer.start();
     return app.exec();

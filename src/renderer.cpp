@@ -4,6 +4,7 @@
 #include <qquick_bgfx.h>
 
 #include <debugdraw/debugdraw.h>
+#include <glm/ext.hpp>
 #include <glm/glm.hpp>
 #include <glm/gtx/color_space.hpp>
 #include <glm/gtx/string_cast.hpp>
@@ -19,20 +20,33 @@ void renderer::init(const bgfx::Init &init)
     }
 }
 
-void renderer::render(entt::registry &registry)
+namespace registry::utils {
+template<typename T>
+const T& getUpdatedComponent(entt::registry &r, const entt::entity e, const T& c)
 {
-    registry.view<components::ViewId, components::ViewPort, components::Mouse, components::Color>().each(
-      [](const auto &viewId, const auto &viewport, const auto &mouse, const auto &color) {
-          const auto w = viewport.value[2];
-          const auto h = viewport.value[3];
-          auto hsv = glm::hsvColor(glm::vec3{color.value});
-          hsv.z *= std::clamp(mouse.pos.y / (float)h, 0.0f, 1.0f);
-          auto c = glm::rgbColor(hsv);
-          float r{c.x};
-          float g{c.y};
-          float b{c.z};
+    if (r.has<components::Update<T>>(e))
+    {
+        return r.get<components::Update<T>>(e).component;
+    }
+    else
+    {
+        return c;
+    }
+}
+}
 
-          const uint32_t icolor = uint8_t(r * 255) << 24 | uint8_t(g * 255) << 16 | uint8_t(b * 255) << 8 | 255;
+
+void renderer::render(const entt::registry &registry)
+{
+    registry.view<const components::ViewId, const components::ViewPort, const components::Mouse, const components::Color, const CameraPersp>().each(
+      [&registry](const auto e, const auto &viewId, const auto &viewport, const auto &mouse, const auto &color, const auto &cam) {
+
+          const auto &w = viewport.value.z;
+          const auto &h = viewport.value.w;
+          if (w == 0 || h == 0)
+            return;
+        
+          const uint32_t icolor = uint8_t(color.value.r * 255) << 24 | uint8_t(color.value.g * 255) << 16 | uint8_t(color.value.b * 255) << 8 | 255;
 
           bgfx::setViewClear(viewId.value, BGFX_CLEAR_COLOR | BGFX_CLEAR_DEPTH, icolor, 1.0f, 0);
           bgfx::touch(viewId.value);
@@ -40,22 +54,16 @@ void renderer::render(entt::registry &registry)
           static float time{0.0f};
           time += 0.003f;
 
-          const bx::Vec3 at = {0.0f, 0.0f, 0.0f};
-          const bx::Vec3 eye = {std::clamp(mouse.pos.x / (float)w - 0.5f, -0.5f, 0.5f) * 15.0f, 0.0f,
-                                std::clamp(mouse.pos.y / (float)h - 0.5f, -0.5f, 0.5f) * 15.0f};
+          const auto &view = cam.getViewMatrix();
+          const auto &proj = cam.getProjectionMatrix();
 
-          float view[16];
-          bx::mtxLookAt(view, eye, at);
-
-          float proj[16];
-          bx::mtxProj(proj, 60.0f, float(w) / float(h), 0.1f, 100.0f, bgfx::getCaps()->homogeneousDepth);
-          bgfx::setViewTransform(viewId.value, view, proj);
+          bgfx::setViewTransform(viewId.value, glm::value_ptr(view), glm::value_ptr(proj));
           bgfx::setViewRect(viewId.value, 0, 0, uint16_t(w), uint16_t(h));
-
           float mtx[16];
           bx::mtxRotateXY(mtx, time, time);
           DebugDrawEncoder dde;
           dde.begin(viewId.value);
+          dde.setState(true, true, false);
           dde.drawCapsule({-2.0f, -2.0f, 0.0f}, {-2.0f, 0.0f, 0.0f}, 1.0);
           dde.drawCone({3.0f, -2.0f, 0.0f}, {3.0f, 2.0f, 0.0f}, 1.0f);
           dde.drawAxis(0.0f, 0.0f, 0.0f);

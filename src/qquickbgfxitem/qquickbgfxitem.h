@@ -23,10 +23,10 @@ public:
     void setBackgroundColor(QColor color);
 
     QPointF mousePosition() { return m_mousePos; }
+    float mouseScroll() { return m_mouseScroll; }
     Qt::MouseButtons mouseButtons() { return m_mouseButtons; }
 
     uint16_t dprWidth() const { return m_dprWidth; }
-
     uint16_t dprHeight() const { return m_dprHeight; }
 
 signals:
@@ -41,6 +41,7 @@ protected:
     void mouseMoveEvent(QMouseEvent *event) override;
     void mousePressEvent(QMouseEvent *event) override;
     void mouseReleaseEvent(QMouseEvent *event) override;
+    void wheelEvent(QWheelEvent *event) override;
 
 private slots:
     void invalidateSceneGraph();
@@ -52,6 +53,7 @@ private:
     uint16_t m_viewId{0};
     QColor m_backgroundColor;
     QPointF m_mousePos{0.0f, 0.0f};
+    float m_mouseScroll{0.0f};
     Qt::MouseButtons m_mouseButtons;
     uint16_t m_dprWidth{0u};
     uint16_t m_dprHeight{0u};

@@ -1,8 +1,11 @@
 #include <engine.h>
 
+#include <systems/camera_system.h>
+
 #include <iostream>
 #include <functional>
 #include <utility>
+
 
 namespace {
 template<typename T>
@@ -24,15 +27,12 @@ void consolidate(entt::registry &r, const std::variant<Ts...>&)
 void engine::preUpdate(entt::registry &registry)
 {}
 
+
 void engine::update(entt::registry &registry)
 {
-registry.view<components::Update<components::Mouse>>().each([](const auto &mouse){
-
-    for (const auto& e : mouse.component.buttons)
-    {
-//        std::cout << e << std::endl;
-    }
-});
+    engine::preUpdate(registry);
+    systems::cameraSystem::update(registry);
+    engine::postUpdate(registry);
 }
 
 void engine::postUpdate(entt::registry &registry)

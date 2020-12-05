@@ -8,5 +8,5 @@ namespace renderer
 void init(const bgfx::Init &init);
 
 //render_example runs the rendering code
-void render(entt::registry &);
+void render(const entt::registry &);
 }    // namespace renderer

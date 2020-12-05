@@ -1,4 +1,5 @@
 #pragma once
+#include <camera.h>
 
 #include <glm/glm.hpp>
 
@@ -46,7 +47,7 @@ struct Update
     T component;
 };
 
-using Updatables = std::variant<Color, Mouse, ViewPort> ;
+using Updatables = std::variant<Color, Mouse, ViewPort, CameraPersp> ;
 
 inline Updatables updatables;
 

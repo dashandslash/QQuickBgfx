@@ -17,6 +17,8 @@ find_package(Qt6 COMPONENTS Quick)
 set(SOURCES
 
     main.cpp
+    src/camera.h
+    src/camera.cpp
     src/components/base.h
     src/components/base.cpp
     src/engine.h
@@ -32,6 +34,8 @@ set(SOURCES
     src/qsgbgfxnode/qsgbgfxnode.cpp
     src/renderer.h
     src/renderer.cpp
+    src/systems/camera_system.h
+    src/systems/camera_system.cpp
 )
 if(APPLE)
     set(SOURCES

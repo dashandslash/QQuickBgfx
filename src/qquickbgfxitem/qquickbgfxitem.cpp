@@ -98,6 +98,21 @@ void QQuickBgfxItem::mouseReleaseEvent(QMouseEvent *event)
     emit mouseChanged();
 }
 
+void QQuickBgfxItem::wheelEvent(QWheelEvent *event)
+{
+    QQuickItem::wheelEvent(event);
+    m_mousePos = event->position();
+    const auto numDegrees = event->angleDelta() / 8.0f;
+
+    if (!numDegrees.isNull()) {
+        m_mouseScroll += numDegrees.y() / 4.0f;
+    }
+
+    m_mouseButtons = event->buttons();
+    event->setAccepted(true);
+    emit mouseChanged();
+}
+
 void QQuickBgfxItem::setViewId(uint16_t viewId)
 {
     if (viewId == m_viewId)

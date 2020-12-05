@@ -12,7 +12,7 @@ Item {
         anchors.top: parent.top
         anchors.left: parent.left
         anchors.right: parent.right
-        height: parent.height / 3
+        height: parent.height
         viewId: 0
         backgroundColor: "#3369ff"
 
@@ -30,7 +30,7 @@ Item {
 
         SequentialAnimation on backgroundColor {
             ColorAnimation { to: "#3369ff"; duration: 2000 }
-            ColorAnimation { to: bgfxItem2.backgroundColor; duration: 1500 }
+            ColorAnimation { to: "#ff69ff"; duration: 1500 }
             loops: Animation.Infinite
             running: true
         }
@@ -42,7 +42,7 @@ Item {
             color: "transparent"
         }
     }
-
+/*
     BgfxItem {
         objectName: "bgfxItem2"
         id: bgfxItem2
@@ -114,7 +114,7 @@ Item {
             color: "transparent"
         }
     }
-
+*/
     Rectangle {
         color: Qt.rgba(1, 0.85, 0.7, 0.7)
         radius: 10
@@ -124,7 +124,7 @@ Item {
         anchors.right: label1.right
         anchors.left: label1.left
         anchors.bottom: label3.bottom
-        anchors.margins: -10
+        anchors.margins: -2
     }
 
     Text {
