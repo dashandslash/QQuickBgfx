@@ -5,7 +5,7 @@
 #include <qbgfx.h>
 #include <qbgfx_utils.h>
 #include <qquick_bgfx.h>
-#include <renderer.h>
+#include <renderer/renderer.h>
 
 #include <QGuiApplication>
 #include <QQuickView>

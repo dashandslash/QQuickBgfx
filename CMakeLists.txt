@@ -32,8 +32,8 @@ set(SOURCES
     src/qquick_bgfx.h
     src/qsgbgfxnode/qsgbgfxnode.h
     src/qsgbgfxnode/qsgbgfxnode.cpp
-    src/renderer.h
-    src/renderer.cpp
+    src/renderer/renderer.h
+    src/renderer/renderer.cpp
     src/systems/camera_system.h
     src/systems/camera_system.cpp
 )
