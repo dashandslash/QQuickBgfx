@@ -1,6 +1,6 @@
 #define ENTT_USE_ATOMIC
 
-#include <engine.h>
+#include <engine/engine.h>
 #include <qquickbgfxitem/qquickbgfxitem.h>
 #include <qbgfx.h>
 #include <qbgfx_utils.h>

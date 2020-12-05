@@ -21,8 +21,8 @@ set(SOURCES
     src/camera.cpp
     src/components/base.h
     src/components/base.cpp
-    src/engine.h
-    src/engine.cpp
+    src/engine/engine.h
+    src/engine/engine.cpp
     src/qquickbgfxitem/qquickbgfxitem.h
     src/qquickbgfxitem/qquickbgfxitem.cpp
     src/qbgfx.h
