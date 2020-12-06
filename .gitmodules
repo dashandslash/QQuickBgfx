@@ -10,3 +10,6 @@
 [submodule "deps/glm"]
 	path = deps/glm
 	url = git@github.com:g-truc/glm.git
+[submodule "deps/MPMCQueue"]
+	path = deps/MPMCQueue
+	url = git@github.com:rigtorp/MPMCQueue.git
