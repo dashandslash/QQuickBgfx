@@ -1,5 +1,5 @@
 #include "camera_system.h"
-#define GLM_SWIZZLE
+#define GLM_FORCE_SWIZZLE
 #include <components/base.h>
 #include <components/camera.h>
 
