@@ -20,21 +20,6 @@ void renderer::init(const bgfx::Init &init)
     }
 }
 
-namespace registry::utils {
-template<typename T>
-const T &getUpdatedComponent(entt::registry &r, const entt::entity e, const T &c)
-{
-    if (r.has<components::Update<T>>(e))
-    {
-        return r.get<components::Update<T>>(e).component;
-    }
-    else
-    {
-        return c;
-    }
-}
-}    // namespace registry::utils
-
 void renderer::render(const entt::registry &registry)
 {
     registry
