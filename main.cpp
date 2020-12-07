@@ -44,18 +44,18 @@ int main(int argc, char **argv)
     QObject::connect(&qbgfx, &QQuickBgfx::QBgfx::initialized, renderer::init);
     //Connection to render signal allows to decouple the rendering code from the qquick_bgfx::QBgfx wrapper
     QObject::connect(&qbgfx, &QQuickBgfx::QBgfx::render, [&engine](){
-        engine.update(registry);
+//        engine.update(registry);
         renderer::render(registry);
     });
 
-//    QTimer timer;
-//    timer.setInterval(16);
-//    timer.setSingleShot(false);
-//    timer.setTimerType(Qt::PreciseTimer);
-//    QObject::connect(&timer, &QTimer::timeout, [&]()
-//    {
-//        engine.update(registry);
-//    });
-//    timer.start();
+    QTimer timer;
+    timer.setInterval(16);
+    timer.setSingleShot(false);
+    timer.setTimerType(Qt::PreciseTimer);
+    QObject::connect(&timer, &QTimer::timeout, [&]()
+    {
+        engine.update(registry);
+    });
+    timer.start();
     return app.exec();
 }

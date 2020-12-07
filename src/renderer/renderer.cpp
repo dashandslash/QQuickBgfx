@@ -59,7 +59,6 @@ void renderer::render(const entt::registry &registry)
           const auto &proj = cam.getProjectionMatrix();
 
           bgfx::setViewTransform(viewId.value, glm::value_ptr(view), glm::value_ptr(proj));
-          bgfx::setViewRect(viewId.value, 0, 0, uint16_t(w), uint16_t(h));
           float mtx[16];
           bx::mtxRotateXY(mtx, time, time);
           DebugDrawEncoder dde;
