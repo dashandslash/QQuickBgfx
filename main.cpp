@@ -3,7 +3,6 @@
 #include <engine/engine.h>
 #include <qquickbgfxitem/qquickbgfxitem.h>
 #include <qbgfx.h>
-#include <qbgfx_utils.h>
 #include <qquick_bgfx.h>
 #include <renderer/renderer.h>
 
@@ -39,24 +38,24 @@ int main(int argc, char **argv)
     view.show();
     auto items = view.rootObject()->findChildren<QQuickBgfxItem *>();
     const auto qbgfx = QQuickBgfx::QBgfx(static_cast<QQuickWindow *>(&view), items);
-    QQuickBgfx::utils::connectItemsSignals(registry, items);
+    engine::engine engine(registry, items);
 
     //Connection to initialized signal allows to decouple the bgfx initialization from the qquick_bgfx::QBgfx wrapper
     QObject::connect(&qbgfx, &QQuickBgfx::QBgfx::initialized, renderer::init);
     //Connection to render signal allows to decouple the rendering code from the qquick_bgfx::QBgfx wrapper
-    QObject::connect(&qbgfx, &QQuickBgfx::QBgfx::render, [](){
-//        engine::update(registry);
+    QObject::connect(&qbgfx, &QQuickBgfx::QBgfx::render, [&engine](){
+        engine.update(registry);
         renderer::render(registry);
     });
 
-    QTimer timer;
-    timer.setInterval(16);
-    timer.setSingleShot(false);
-    timer.setTimerType(Qt::PreciseTimer);
-    QObject::connect(&timer, &QTimer::timeout, [&]()
-    {
-        engine::update(registry);
-    });
-    timer.start();
+//    QTimer timer;
+//    timer.setInterval(16);
+//    timer.setSingleShot(false);
+//    timer.setTimerType(Qt::PreciseTimer);
+//    QObject::connect(&timer, &QTimer::timeout, [&]()
+//    {
+//        engine.update(registry);
+//    });
+//    timer.start();
     return app.exec();
 }

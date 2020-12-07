@@ -27,8 +27,6 @@ set(SOURCES
     src/qquickbgfxitem/qquickbgfxitem.cpp
     src/qbgfx.h
     src/qbgfx.cpp
-    src/qbgfx_utils.h
-    src/qbgfx_utils.cpp
     src/qquick_bgfx.h
     src/qsgbgfxnode/qsgbgfxnode.h
     src/qsgbgfxnode/qsgbgfxnode.cpp
@@ -36,6 +34,9 @@ set(SOURCES
     src/renderer/renderer.cpp
     src/systems/camera_system.h
     src/systems/camera_system.cpp
+    src/systems/qquickbgfx.h
+    src/systems/qquickbgfx.cpp
+    deps/MPMCQueue/include/rigtorp/MPMCQueue.h
 )
 if(APPLE)
     set(SOURCES
@@ -70,6 +71,7 @@ target_link_libraries(BgfxQQuickItemExample PUBLIC
     glm::glm
     EnTT
     example-common
+    MPMCQueue
 )
 
 target_include_directories(BgfxQQuickItemExample

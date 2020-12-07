@@ -24,18 +24,24 @@ void consolidate(entt::registry &r, const std::variant<Ts...>&)
 }
 }
 
-void engine::preUpdate(entt::registry &registry)
+engine::engine::engine(entt::registry &registry, const QList<::QQuickBgfxItem *> &bgfxItems) : m_bgfxSystem(registry, bgfxItems)
+{
+
+}
+
+void engine::engine::preUpdate(entt::registry &registry)
 {}
 
 
-void engine::update(entt::registry &registry)
+void engine::engine::update(entt::registry &registry)
 {
     engine::preUpdate(registry);
+    m_bgfxSystem.update(registry);
     systems::cameraSystem::update(registry);
-    engine::postUpdate(registry);
+    postUpdate(registry);
 }
 
-void engine::postUpdate(entt::registry &registry)
+void engine::engine::postUpdate(entt::registry &registry)
 {
     consolidate(registry, components::updatables);
 }
