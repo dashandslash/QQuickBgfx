@@ -9,22 +9,19 @@
 
 class QQuickBgfxItem;
 
-namespace systems
-{
+namespace systems {
 
 using queueElement = std::tuple<entt::entity, components::Updatables>;
 
 struct QQuickBgfx
 {
-QQuickBgfx() = delete;
+    QQuickBgfx() = delete;
 
-QQuickBgfx(entt::registry &registry, const QList<::QQuickBgfxItem *> &bgfxItems);
+    QQuickBgfx(entt::registry &registry, const QList<::QQuickBgfxItem *> &bgfxItems);
 
-void update(entt::registry &registry);
+    void update(entt::registry &registry);
 
-rigtorp::MPMCQueue<queueElement> queue;
+    rigtorp::MPMCQueue<queueElement> queue;
 };
 
-
-
-}   // namespace systems
+}    // namespace systems

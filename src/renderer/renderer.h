@@ -2,8 +2,7 @@
 #include <bgfx/bgfx.h>
 #include <entt/entt.hpp>
 
-namespace renderer
-{
+namespace renderer {
 //init_example initialize bgfx from a gien bgfx::Init
 void init(const bgfx::Init &init);
 

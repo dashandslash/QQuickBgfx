@@ -2,36 +2,31 @@
 
 #include <systems/camera_system.h>
 
-#include <iostream>
 #include <functional>
+#include <iostream>
 #include <utility>
-
 
 namespace {
 template<typename T>
 void updateAndClear(entt::registry &r)
 {
     auto v = r.view<components::Update<T>>();
-      v.each([&](const auto  e, const auto &updateC){
-        r.emplace_or_replace<T>(e, updateC.component);
-        });
-    r.remove<components::Update<T>>(v.begin() , v.end());
+    v.each([&](const auto e, const auto &updateC) { r.emplace_or_replace<T>(e, updateC.component); });
+    r.remove<components::Update<T>>(v.begin(), v.end());
 }
 template<typename... Ts>
-void consolidate(entt::registry &r, const std::variant<Ts...>&)
+void consolidate(entt::registry &r, const std::variant<Ts...> &)
 {
-  (..., ( updateAndClear<Ts>(r) ));
+    (..., (updateAndClear<Ts>(r)));
 }
-}
+}    // namespace
 
-engine::engine::engine(entt::registry &registry, const QList<::QQuickBgfxItem *> &bgfxItems) : m_bgfxSystem(registry, bgfxItems)
-{
-
-}
+engine::engine::engine(entt::registry &registry, const QList<::QQuickBgfxItem *> &bgfxItems)
+    : m_bgfxSystem(registry, bgfxItems)
+{}
 
 void engine::engine::preUpdate(entt::registry &registry)
 {}
-
 
 void engine::engine::update(entt::registry &registry)
 {

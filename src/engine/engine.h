@@ -3,12 +3,10 @@
 #include <qquickbgfxitem/qquickbgfxitem.h>
 #include <systems/qquickbgfx.h>
 
-#include <entt/entt.hpp>
 #include <QList>
+#include <entt/entt.hpp>
 
-
-namespace engine
-{
+namespace engine {
 struct engine
 {
     engine() = delete;

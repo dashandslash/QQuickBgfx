@@ -104,7 +104,8 @@ void QQuickBgfxItem::wheelEvent(QWheelEvent *event)
     m_mousePos = event->position();
     const auto numDegrees = event->angleDelta() / 8.0f;
 
-    if (!numDegrees.isNull()) {
+    if (!numDegrees.isNull())
+    {
         m_mouseScroll += numDegrees.y() / 4.0f;
     }
 

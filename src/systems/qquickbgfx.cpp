@@ -1,16 +1,16 @@
 #include "qquickbgfx.h"
 
-#include <components/camera.h>
 #include <components/base.h>
+#include <components/camera.h>
 #include <qquickbgfxitem/qquickbgfxitem.h>
 
 #include <QList>
 
+#include <iostream>
 #include <thread>
 #include <type_traits>
-#include <iostream>
 
-template <typename T>
+template<typename T>
 void enqueue(rigtorp::MPMCQueue<systems::queueElement> &q, entt::entity e, T component)
 {
     auto c = std::tuple<entt::entity, T>(e, component);
@@ -20,15 +20,18 @@ void enqueue(rigtorp::MPMCQueue<systems::queueElement> &q, entt::entity e, T com
 void systems::QQuickBgfx::update(entt::registry &registry)
 {
     systems::queueElement element;
-    while (queue.try_pop(element)) {
+    while (queue.try_pop(element))
+    {
         const auto [e, updatable] = element;
-        std::visit([&, e = e](const auto& component){
-            registry.emplace_or_replace<components::Update<std::decay_t<decltype(component)>>>(e, component);
-        }, updatable);
+        std::visit(
+          [&, e = e](const auto &component) {
+              registry.emplace_or_replace<components::Update<std::decay_t<decltype(component)>>>(e, component);
+          },
+          updatable);
     }
 }
 
-systems::QQuickBgfx::QQuickBgfx(entt::registry &registry, const QList<::QQuickBgfxItem *> &bgfxItems) : queue(1024)
+systems::QQuickBgfx::QQuickBgfx(entt::registry &registry, const QList<::QQuickBgfxItem *> &bgfxItems): queue(1024)
 {
     for (const auto &item : bgfxItems)
     {
@@ -42,8 +45,8 @@ systems::QQuickBgfx::QQuickBgfx(entt::registry &registry, const QList<::QQuickBg
         cam.lookAt({0.0f, 0.0f, 5.0f}, {0.0f, 0.0f, 0.0f}, {0.0f, 1.0f, 0.0f});
 
         QObject::connect(item, &QQuickBgfxItem::geometryChanged, [&]() {
-            registry.view<components::ViewId>().each([&](const auto e, const auto viewId){
-                if(viewId.value == item->viewId())
+            registry.view<components::ViewId>().each([&](const auto e, const auto viewId) {
+                if (viewId.value == item->viewId())
                 {
                     auto viewport = components::ViewPort{glm::ivec4{0, 0, item->dprWidth(), item->dprHeight()}};
                     enqueue(queue, e, std::move(viewport));
@@ -52,8 +55,8 @@ systems::QQuickBgfx::QQuickBgfx(entt::registry &registry, const QList<::QQuickBg
         });
 
         QObject::connect(item, &QQuickBgfxItem::backgroundColorChanged, [&]() {
-            registry.view<components::ViewId>().each([&](const auto e, const auto viewId){
-                if(viewId.value == item->viewId())
+            registry.view<components::ViewId>().each([&](const auto e, const auto viewId) {
+                if (viewId.value == item->viewId())
                 {
                     auto color = components::Color();
                     item->backgroundColor().getRgbF(&color.value[0], &color.value[1], &color.value[2]);
@@ -63,13 +66,17 @@ systems::QQuickBgfx::QQuickBgfx(entt::registry &registry, const QList<::QQuickBg
         });
 
         QObject::connect(item, &QQuickBgfxItem::mouseChanged, [&]() {
-              registry.view<components::ViewId>().each([&](const auto e, const auto viewId){
-                if(viewId.value == item->viewId())
+            registry.view<components::ViewId>().each([&](const auto e, const auto viewId) {
+                if (viewId.value == item->viewId())
                 {
-                    auto mouse = components::Mouse{{item->mousePosition().x(), item->mousePosition().y(), item->mouseScroll()}, {item->mouseButtons().testFlag(Qt::MouseButton::LeftButton), item->mouseButtons().testFlag(Qt::MouseButton::MiddleButton), item->mouseButtons().testFlag(Qt::MouseButton::RightButton)}};
+                    auto mouse =
+                      components::Mouse{{item->mousePosition().x(), item->mousePosition().y(), item->mouseScroll()},
+                                        {item->mouseButtons().testFlag(Qt::MouseButton::LeftButton),
+                                         item->mouseButtons().testFlag(Qt::MouseButton::MiddleButton),
+                                         item->mouseButtons().testFlag(Qt::MouseButton::RightButton)}};
                     enqueue(queue, e, std::move(mouse));
                 }
-              });
+            });
         });
     }
 }

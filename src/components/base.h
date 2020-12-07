@@ -41,13 +41,13 @@ struct Color
     glm::vec4 value;
 };
 
-template <typename T>
+template<typename T>
 struct Update
 {
     T component;
 };
 
-using Updatables = std::variant<Color, Mouse, ViewPort, CameraPersp> ;
+using Updatables = std::variant<Color, Mouse, ViewPort, CameraPersp>;
 
 inline Updatables updatables;
 

@@ -9,7 +9,6 @@
 #include <glm/gtx/color_space.hpp>
 #include <glm/gtx/string_cast.hpp>
 
-
 void renderer::init(const bgfx::Init &init)
 {
     if (!QQuickBgfx::initialized())
@@ -23,7 +22,7 @@ void renderer::init(const bgfx::Init &init)
 
 namespace registry::utils {
 template<typename T>
-const T& getUpdatedComponent(entt::registry &r, const entt::entity e, const T& c)
+const T &getUpdatedComponent(entt::registry &r, const entt::entity e, const T &c)
 {
     if (r.has<components::Update<T>>(e))
     {
@@ -34,20 +33,22 @@ const T& getUpdatedComponent(entt::registry &r, const entt::entity e, const T& c
         return c;
     }
 }
-}
-
+}    // namespace registry::utils
 
 void renderer::render(const entt::registry &registry)
 {
-    registry.view<const components::ViewId, const components::ViewPort, const components::Mouse, const components::Color, const components::CameraPersp>().each(
-      [&registry](const auto e, const auto &viewId, const auto &viewport, const auto &mouse, const auto &color, const auto &cam) {
-
+    registry
+      .view<const components::ViewId, const components::ViewPort, const components::Mouse, const components::Color,
+            const components::CameraPersp>()
+      .each([&registry](const auto e, const auto &viewId, const auto &viewport, const auto &mouse, const auto &color,
+                        const auto &cam) {
           const auto &w = viewport.value.z;
           const auto &h = viewport.value.w;
           if (w == 0 || h == 0)
-            return;
-        
-          const uint32_t icolor = uint8_t(color.value.r * 255) << 24 | uint8_t(color.value.g * 255) << 16 | uint8_t(color.value.b * 255) << 8 | 255;
+              return;
+
+          const uint32_t icolor = uint8_t(color.value.r * 255) << 24 | uint8_t(color.value.g * 255) << 16 |
+                                  uint8_t(color.value.b * 255) << 8 | 255;
 
           bgfx::setViewClear(viewId.value, BGFX_CLEAR_COLOR | BGFX_CLEAR_DEPTH, icolor, 1.0f, 0);
           bgfx::touch(viewId.value);
