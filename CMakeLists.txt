@@ -39,15 +39,19 @@ if(WIN32)
     )
 endif()
 
+if(UNIX)
+    set(SOURCES
+        ${SOURCES}
+        src/qquick_bgfx_opengl.cpp
+    )
+endif()
 
 qt_add_executable(BgfxQQuickItemExample
     ${SOURCES}
 )
 
 
-
 target_link_libraries(BgfxQQuickItemExample PUBLIC
-    "-framework Metal"
     Qt::Core
     Qt::Gui
     Qt::Qml
@@ -79,6 +83,7 @@ qt6_add_resources(BgfxQQuickItemExample "BgfxQQuickItemExample"
 if(MACOS)
     target_link_libraries(BgfxQQuickItemExample PUBLIC
         "-framework AppKit"
+        "-framework Metal"
     )
 endif()
 

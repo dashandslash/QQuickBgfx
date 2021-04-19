@@ -92,6 +92,10 @@ void QSGBgfxNode::sync()
 #ifdef _WIN32
             qsgtexture = QQuickBgfx::qsgTexture<bgfx::RendererType::Direct3D11>(m_texture, m_window, width, height);
 #endif
+        case bgfx::RendererType::OpenGL:
+#ifdef __linux__
+            qsgtexture = QQuickBgfx::qsgTexture<bgfx::RendererType::OpenGL>(m_texture, m_window, width, height);
+#endif
             break;
         default:
             throw std::runtime_error("Invalid or not implemented Graphics Api");

@@ -74,12 +74,17 @@ int main(int argc, char **argv)
 {
     QGuiApplication app(argc, argv);
 
-#if(WIN32)
-    QQuickWindow::setGraphicsApi(QSGRendererInterface::Direct3D11Rhi);
-#else
+#ifdef __APPLE__
     QQuickWindow::setGraphicsApi(QSGRendererInterface::MetalRhi);
 #endif
-    
+
+#ifdef _WIN32
+    QQuickWindow::setGraphicsApi(QSGRendererInterface::Direct3D11Rhi);
+#endif
+
+#ifdef __linux__
+    QQuickWindow::setGraphicsApi(QSGRendererInterface::OpenGL);
+#endif
 
     QQuickView view;
     view.setResizeMode(QQuickView::SizeRootObjectToView);
