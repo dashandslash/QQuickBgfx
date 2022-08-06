@@ -1,6 +1,6 @@
 [submodule "deps/bgfx.cmake"]
 	path = deps/bgfx.cmake
-	url = git@github.com:dashandslash/bgfx.cmake.git
+	url = git@github.com:bkaradzic/bgfx.cmake.git
 [submodule "deps/brtshaderc"]
 	path = deps/brtshaderc
 	url = git@github.com:fredakilla/brtshaderc.git
