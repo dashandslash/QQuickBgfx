@@ -93,6 +93,10 @@ set_target_properties(BgfxQQuickItemExample PROPERTIES
     QT_QML_MODULE_URI QQuickBgfx
 )
 
-qt6_qml_type_registration(BgfxQQuickItemExample)
+qt_add_qml_module(BgfxQQuickItemExample
+                  URI QQuickBgfx
+                  VERSION 1.0
+                  QML_FILES main.qml
+                  )
 add_subdirectory(deps)
 
