@@ -64,7 +64,7 @@ void render_example(const std::vector<QQuickBgfxItem*>& bgfxItems)
             dde.drawCone({3.0f, -2.0f, 0.0f}, {3.0f, 2.0f, 0.0f}, 1.0f);
             dde.drawAxis(0.0f, 0.0f, 0.0f);
             dde.setTransform(&mtx);
-            dde.draw(Aabb{{0.0f, 0.0f, 0.0f}, {1.0f, 1.0f, 1.0f}});
+            dde.draw(bx::Aabb{{0.0f, 0.0f, 0.0f}, {1.0f, 1.0f, 1.0f}});
             dde.end();
         }
     }
