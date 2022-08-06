@@ -22,8 +22,7 @@ private:
     qreal m_dpr;
 
     bgfx::FrameBufferHandle m_offscreenFB{bgfx::kInvalidHandle};
-    bgfx::TextureHandle m_backBuffer{bgfx::kInvalidHandle};
-    bgfx::TextureHandle m_depthBuffer{bgfx::kInvalidHandle};
+    bgfx::TextureHandle m_attachments[2]{bgfx::kInvalidHandle, bgfx::kInvalidHandle};
 
     uint16_t m_viewId{0};
     uint64_t m_frameCount{0};

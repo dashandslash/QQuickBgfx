@@ -6,7 +6,8 @@
 
 #include <bgfx/bgfx.h>
 #include <qquick_bgfx.h>
-#include <bx/bx.h>
+#include <bx/bounds.h>
+#include <bx/math.h>
 #include <debugdraw/debugdraw.h>
 
 //init_example initialize bgfx from a gien bgfx::Init

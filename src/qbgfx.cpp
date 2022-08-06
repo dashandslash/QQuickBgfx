@@ -36,25 +36,21 @@ void QBgfx::init()
     const auto dpr = m_window->effectiveDevicePixelRatio();
     auto winHandle = reinterpret_cast<void *>(m_window->winId());
     auto context = static_cast<void *>(rif->getResource(m_window, QSGRendererInterface::DeviceResource));
-    
+
+    bgfx::RendererType::Enum gaphicsApi{bgfx::RendererType::Count};
     switch (rif->graphicsApi())
     {
         case QSGRendererInterface::MetalRhi:
-#ifdef __APPLE__
-            m_bgfxInit = QQuickBgfx::init<bgfx::RendererType::Metal>(winHandle, context, m_window->width() * dpr,
-                                                                     m_window->height() * dpr);
-#endif
+            gaphicsApi = bgfx::RendererType::Metal;
             break;
-        case QSGRendererInterface::Direct3D11Rhi:
-#ifdef _WIN32
-                m_bgfxInit = QQuickBgfx::init<bgfx::RendererType::Direct3D11>(winHandle, context, m_window->width() * dpr,
-                    m_window->height() * dpr);
-#endif
-        break;
+        case QSGRendererInterface::Direct3D11:
+            gaphicsApi = bgfx::RendererType::Direct3D11;
+            break;
         default:
-            throw std::runtime_error("Invalid or not implemented Graphics Api");
-            return;
+            break;
     }
+    m_bgfxInit =
+      QQuickBgfx::initBackend(gaphicsApi, winHandle, context, m_window->width() * dpr, m_window->height() * dpr);
 
     emit initialized(m_bgfxInit);
 }
